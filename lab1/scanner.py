@@ -1,11 +1,24 @@
 import ply.lex as lex
 
-tokens = (
+reserved = {
+    'if': 'IF',
+    'then': 'THEN',
+    'else': 'ELSE',
+    'while': 'WHILE',
+    'break': 'BREAK',
+    'continue': 'CONTINUE',
+    'return': 'return',
+    'eye': 'EYE',
+    'zeros': 'ZEROS',
+    'ones': 'ONES',
+    'print': 'PRINT'
+}
+
+tokens = [
     'ID',
     'INTNUM',
-    'ZEROS',
-    'ONES',
-    'EYE',
+    'FLONUM',
+    'STRING',
     'DOTADD',
     'DOTSUB',
     'DOTMUL',
@@ -18,12 +31,14 @@ tokens = (
     'LOWEREQUAL',
     'EQUALS',
     'NOTEQUALS'
-)
+]
+tokens += list(reserved.values())
 
 literals = "+-*/=();,':[]{}<>"
 
 def t_ID(t):
-    r'[a-zA-Z_]\w*'
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value, 'ID')
     return t
 
 def t_INTNUM(t):
@@ -31,14 +46,23 @@ def t_INTNUM(t):
     t.value = int(t.value)
     return t
 
-t_DOTADD = '.+'
-t_DOTSUB = '.-'
-t_DOTMUL = '.*'
-t_DOTDIV = '/*'
-t_ADDASSIGN = '+='
-t_SUBASSIGN = '-='
-t_MULASSIGN = '*='
-t_DIVASSIGN = '/='
+def t_FLONUM(t):
+    r'\d*\.\d+|\d+\.\d*'
+    t.value = float(t.value)
+    return t
+
+def t_STRING(t):
+    r'\"[a-zA-Z0-9]*\"'
+    return t
+
+t_DOTADD = r'\.\+'
+t_DOTSUB = r'\.\-'
+t_DOTMUL = r'\.\*'
+t_DOTDIV = r'\.\/'
+t_ADDASSIGN = r'\+='
+t_SUBASSIGN = r'\-='
+t_MULASSIGN = r'\*='
+t_DIVASSIGN = r'\/='
 t_GREATEREQUAL = '>='
 t_LOWEREQUAL = '<='
 t_EQUALS = '=='
