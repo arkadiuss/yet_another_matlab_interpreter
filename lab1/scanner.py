@@ -9,10 +9,18 @@ tokens = (
     'DOTADD',
     'DOTSUB',
     'DOTMUL',
-    'DOTDIV'
+    'DOTDIV',
+    'ADDASSIGN',
+    'SUBASSIGN',
+    'MULASSIGN',
+    'DIVASSIGN',
+    'GREATEREQUAL',
+    'LOWEREQUAL',
+    'EQUALS',
+    'NOTEQUALS'
 )
 
-literals = "+-*/=();"
+literals = "+-*/=();,':[]{}<>"
 
 def t_ID(t):
     r'[a-zA-Z_]\w*'
@@ -23,14 +31,18 @@ def t_INTNUM(t):
     t.value = int(t.value)
     return t
 
-def t_ZEROS(t):
-    r'zeros'
-
-def t_ONES(t):
-    r'ones'
-
-def t_EYE(t):
-    r'eye'
+t_DOTADD = '.+'
+t_DOTSUB = '.-'
+t_DOTMUL = '.*'
+t_DOTDIV = '/*'
+t_ADDASSIGN = '+='
+t_SUBASSIGN = '-='
+t_MULASSIGN = '*='
+t_DIVASSIGN = '/='
+t_GREATEREQUAL = '>='
+t_LOWEREQUAL = '<='
+t_EQUALS = '=='
+t_NOTEQUALS = '!='
 
 t_ignore = ' \t'
 
