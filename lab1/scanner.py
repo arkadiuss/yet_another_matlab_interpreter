@@ -16,8 +16,8 @@ reserved = {
 
 tokens = [
     'ID',
-    'INTNUM',
     'FLONUM',
+    'INTNUM',
     'STRING',
     'DOTADD',
     'DOTSUB',
@@ -30,7 +30,8 @@ tokens = [
     'GREATEREQUAL',
     'LOWEREQUAL',
     'EQUALS',
-    'NOTEQUALS'
+    'NOTEQUALS',
+    'COMMENT'
 ]
 tokens += list(reserved.values())
 
@@ -41,18 +42,22 @@ def t_ID(t):
     t.type = reserved.get(t.value, 'ID')
     return t
 
-def t_INTNUM(t):
-    r'[\d+]'
-    t.value = int(t.value)
-    return t
-
 def t_FLONUM(t):
-    r'\d*\.\d+|\d+\.\d*'
+    r'\d*\.\d+[eE]\d+|\d+\.\d*|\d*\.\d+'
     t.value = float(t.value)
     return t
 
+def t_INTNUM(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
+
 def t_STRING(t):
-    r'\"[a-zA-Z0-9]*\"'
+    r'\"[^"]*\"'
+    return t
+
+def t_COMMENT(t):
+    r'\#[^\n]*'
     return t
 
 t_DOTADD = r'\.\+'
@@ -72,9 +77,6 @@ t_ignore = ' \t'
 
 def t_newline(t):
     r'\n+'
-    t.lexel.lineno += len(t.value)
+    t.lexer.lineno += len(t.value)
 
 lexer = lex.lex()
-
-def find_column(text, token):
-    return -1

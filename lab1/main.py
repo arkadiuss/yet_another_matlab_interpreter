@@ -22,7 +22,6 @@ if __name__ == '__main__':
         tok = lexer.token()
         if not tok: 
             break    # No more input
-        column = scanner.find_column(text,tok)
-        print("(%d,%d): %s(%s)" %(tok.lineno, column, tok.type, tok.value))
+        print("(%d): %s(%s)" %(tok.lineno, tok.type, tok.value))
 
         
