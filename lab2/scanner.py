@@ -58,7 +58,7 @@ def t_STRING(t):
 
 def t_COMMENT(t):
     r'\#[^\n]*'
-    return t
+    pass
 
 t_DOTADD = r'\.\+'
 t_DOTSUB = r'\.\-'
