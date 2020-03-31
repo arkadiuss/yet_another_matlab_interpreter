@@ -46,12 +46,23 @@ def p_if_instruction(p):
     """if_instruction : IF '(' relational_expr ')' instructions_block"""
 
 def p_assignment(p):
-    """assignment : ID '=' INTNUM
-                  | ID '=' FLONUM
-                  | ID '=' matrix
-                  | ID '=' expr 
-                  | MID '=' INTNUM
-                  | ID '=' matrix_expr"""
+    """assignment : ID '=' token
+                  | MID '=' elem
+                  | ID ADDASSIGN token
+                  | ID SUBASSIGN token
+                  | ID MULASSIGN token
+                  | ID DIVASSIGN token"""
+
+#TODO C = B'
+def p_token(p):
+    """token : ID
+             | INTNUM
+             | FLONUM
+             | matrix
+             | expr
+             | matrix_expr
+             | '-' ID
+             | ID "\'" """
 
 def p_expr(p):
     """expr : expr '+' term

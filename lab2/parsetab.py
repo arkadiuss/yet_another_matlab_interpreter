@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "left+-ADDASSIGN BREAK COMMENT CONTINUE DIVASSIGN DOTADD DOTDIV DOTMUL DOTSUB ELSE EQUALS EYE FLONUM GREATEREQUAL ID IF INTNUM LOWEREQUAL MULASSIGN NOTEQUALS ONES PRINT STRING SUBASSIGN THEN WHILE ZEROS returnprogram : instructions_optinstructions_opt : instructions instructions_opt : instructions_block : '{' instructions '}'instructions : instructions instruction instructions : instruction instruction : assignment ';'\n                   | if_instructionif_instruction : IF '(' relational_expr ')' instructions_blockassignment : ID '=' INTNUM\n                  | ID '=' FLONUM\n                  | ID '=' matrix\n                  | ID '=' expr \n                  | MID '=' INTNUM\n                  | ID '=' matrix_exprexpr : expr '+' term\n            | expr '-' term\n            | term term : term '*' factor\n            | term '/' factor\n            | factorfactor : '(' expr ')'\n              | ID relational_expr : ID GREATEREQUAL INTNUM\n                       | ID EQUALS INTNUM \n                       | ID LOWEREQUAL INTNUM  MID : ID '[' INTNUM ',' INTNUM ']' matrix : '[' outerlist ']'\n              | ONES '(' INTNUM ')'\n              | ZEROS '(' INTNUM ')'\n              | EYE '(' INTNUM ')'outerlist : outerlist ';' innerlist\n                 | innerlistinnerlist : innerlist ',' elem\n                 | elemelem : ID\n            | INTNUM\n            | FLONUMmatrix_expr : matrix_expr DOTADD matrix_term\n                   | matrix_expr DOTSUB matrix_term\n                   | matrix_termmatrix_term : matrix_term DOTMUL matrix_factor\n                   | matrix_term DOTDIV matrix_factor\n                   | matrix_factormatrix_factor : '(' matrix_expr ')'\n                     | ID"
+_lr_signature = 'left+-ADDASSIGN BREAK COMMENT CONTINUE DIVASSIGN DOTADD DOTDIV DOTMUL DOTSUB ELSE EQUALS EYE FLONUM GREATEREQUAL ID IF INTNUM LOWEREQUAL MULASSIGN NOTEQUALS ONES PRINT STRING SUBASSIGN THEN WHILE ZEROS returnprogram : instructions_optinstructions_opt : instructions instructions_opt : instructions_block : \'{\' instructions \'}\'instructions : instructions instruction instructions : instruction instruction : assignment \';\'\n                   | if_instructionif_instruction : IF \'(\' relational_expr \')\' instructions_blockassignment : ID \'=\' token\n                  | MID \'=\' elem\n                  | ID ADDASSIGN token\n                  | ID SUBASSIGN token\n                  | ID MULASSIGN token\n                  | ID DIVASSIGN tokentoken : ID\n             | INTNUM\n             | FLONUM\n             | matrix\n             | expr\n             | matrix_expr\n             | \'-\' ID\n             | ID "\'" expr : expr \'+\' term\n            | expr \'-\' term\n            | term term : term \'*\' factor\n            | term \'/\' factor\n            | factorfactor : \'(\' expr \')\'\n              | ID relational_expr : ID GREATEREQUAL INTNUM\n                       | ID EQUALS INTNUM \n                       | ID LOWEREQUAL INTNUM  MID : ID \'[\' INTNUM \',\' INTNUM \']\' matrix : \'[\' outerlist \']\'\n              | ONES \'(\' INTNUM \')\'\n              | ZEROS \'(\' INTNUM \')\'\n              | EYE \'(\' INTNUM \')\'outerlist : outerlist \';\' innerlist\n                 | innerlistinnerlist : innerlist \',\' elem\n                 | elemelem : ID\n            | INTNUM\n            | FLONUMmatrix_expr : matrix_expr DOTADD matrix_term\n                   | matrix_expr DOTSUB matrix_term\n                   | matrix_termmatrix_term : matrix_term DOTMUL matrix_factor\n                   | matrix_term DOTDIV matrix_factor\n                   | matrix_factormatrix_factor : \'(\' matrix_expr \')\'\n                     | ID'
     
-_lr_action_items = {'$end':([0,1,2,3,4,6,10,11,80,92,],[-3,0,-1,-2,-6,-8,-5,-7,-9,-4,]),'ID':([0,3,4,6,10,11,12,15,22,24,35,36,37,38,50,51,52,53,60,64,68,69,80,81,91,92,],[7,7,-6,-8,-5,-7,16,34,42,16,61,61,65,65,61,61,65,65,61,65,42,42,-9,7,7,-4,]),'IF':([0,3,4,6,10,11,80,81,91,92,],[9,9,-6,-8,-5,-7,-9,9,9,-4,]),'}':([4,6,10,11,80,91,92,],[-6,-8,-5,-7,-9,92,-4,]),';':([5,16,17,18,19,20,21,27,28,29,30,32,39,40,41,42,43,44,59,61,62,63,65,66,67,71,72,75,76,77,78,85,86,87,88,89,],[11,-23,-10,-11,-12,-13,-15,-18,-41,-21,-44,-14,68,-33,-35,-36,-37,-38,-16,-23,-17,-39,-46,-40,-28,-22,-45,-19,-20,-42,-43,-32,-34,-29,-30,-31,]),'=':([7,8,90,],[12,14,-27,]),'[':([7,12,],[13,22,]),'(':([9,12,23,24,25,26,35,36,37,38,50,51,52,53,60,64,],[15,24,45,24,48,49,60,60,64,64,60,60,64,64,60,64,]),'INTNUM':([12,13,14,22,45,48,49,54,56,57,58,68,69,],[17,31,32,43,70,73,74,79,82,83,84,43,43,]),'FLONUM':([12,22,68,69,],[18,44,44,44,]),'ONES':([12,],[23,]),'ZEROS':([12,],[25,]),'EYE':([12,],[26,]),'*':([16,27,29,59,61,62,71,75,76,],[-23,50,-21,50,-23,50,-22,-19,-20,]),'/':([16,27,29,59,61,62,71,75,76,],[-23,51,-21,51,-23,51,-22,-19,-20,]),'+':([16,20,27,29,46,59,61,62,71,75,76,],[-23,35,-18,-21,35,-16,-23,-17,-22,-19,-20,]),'-':([16,20,27,29,46,59,61,62,71,75,76,],[-23,36,-18,-21,36,-16,-23,-17,-22,-19,-20,]),')':([16,27,28,29,30,33,46,47,59,61,62,63,65,66,70,71,72,73,74,75,76,77,78,82,83,84,],[-23,-18,-41,-21,-44,55,71,72,-16,-23,-17,-39,-46,-40,87,-22,-45,88,89,-19,-20,-42,-43,-24,-25,-26,]),'DOTMUL':([16,28,30,63,65,66,72,77,78,],[-46,52,-44,52,-46,52,-45,-42,-43,]),'DOTDIV':([16,28,30,63,65,66,72,77,78,],[-46,53,-44,53,-46,53,-45,-42,-43,]),'DOTADD':([16,21,28,30,47,63,65,66,72,77,78,],[-46,37,-41,-44,37,-39,-46,-40,-45,-42,-43,]),'DOTSUB':([16,21,28,30,47,63,65,66,72,77,78,],[-46,38,-41,-44,38,-39,-46,-40,-45,-42,-43,]),',':([31,40,41,42,43,44,85,86,],[54,69,-35,-36,-37,-38,69,-34,]),'GREATEREQUAL':([34,],[56,]),'EQUALS':([34,],[57,]),'LOWEREQUAL':([34,],[58,]),']':([39,40,41,42,43,44,79,85,86,],[67,-33,-35,-36,-37,-38,90,-32,-34,]),'{':([55,],[81,]),}
+_lr_action_items = {'$end':([0,1,2,3,4,6,10,11,93,105,],[-3,0,-1,-2,-6,-8,-5,-7,-9,-4,]),'ID':([0,3,4,6,10,11,12,13,14,15,16,18,19,27,28,30,49,50,51,52,63,64,65,66,73,77,81,82,93,94,104,105,],[7,7,-6,-8,-5,-7,20,20,20,20,20,43,47,53,43,60,74,74,78,78,74,74,78,78,74,78,43,43,-9,7,7,-4,]),'IF':([0,3,4,6,10,11,93,94,104,105,],[9,9,-6,-8,-5,-7,-9,9,9,-4,]),'}':([4,6,10,11,93,104,105,],[-6,-8,-5,-7,-9,105,-4,]),';':([5,20,21,22,23,24,25,26,33,34,35,36,37,38,39,40,42,43,44,45,48,53,54,55,56,72,74,75,76,78,79,80,84,85,88,89,90,91,98,99,100,101,102,],[11,-16,-10,-17,-18,-19,-20,-21,-26,-49,-29,-52,-12,-13,-14,-15,-11,-44,-45,-46,-23,-22,81,-41,-43,-24,-31,-25,-47,-54,-48,-36,-30,-53,-27,-28,-50,-51,-40,-42,-37,-38,-39,]),'=':([7,8,103,],[12,18,-35,]),'ADDASSIGN':([7,],[13,]),'SUBASSIGN':([7,],[14,]),'MULASSIGN':([7,],[15,]),'DIVASSIGN':([7,],[16,]),'[':([7,12,13,14,15,16,],[17,28,28,28,28,28,]),'(':([9,12,13,14,15,16,29,30,31,32,49,50,51,52,63,64,65,66,73,77,],[19,30,30,30,30,30,57,30,61,62,73,73,77,77,73,73,77,77,73,77,]),'INTNUM':([12,13,14,15,16,17,18,28,57,61,62,67,69,70,71,81,82,],[22,22,22,22,22,41,44,44,83,86,87,92,95,96,97,44,44,]),'FLONUM':([12,13,14,15,16,18,28,81,82,],[23,23,23,23,23,45,45,45,45,]),'-':([12,13,14,15,16,20,25,33,35,58,60,72,74,75,84,88,89,],[27,27,27,27,27,-31,50,-26,-29,50,-31,-24,-31,-25,-30,-27,-28,]),'ONES':([12,13,14,15,16,],[29,29,29,29,29,]),'ZEROS':([12,13,14,15,16,],[31,31,31,31,31,]),'EYE':([12,13,14,15,16,],[32,32,32,32,32,]),"'":([20,],[48,]),'*':([20,33,35,60,72,74,75,84,88,89,],[-31,63,-29,-31,63,-31,63,-30,-27,-28,]),'/':([20,33,35,60,72,74,75,84,88,89,],[-31,64,-29,-31,64,-31,64,-30,-27,-28,]),'+':([20,25,33,35,58,60,72,74,75,84,88,89,],[-31,49,-26,-29,49,-31,-24,-31,-25,-30,-27,-28,]),'DOTMUL':([20,34,36,60,76,78,79,85,90,91,],[-54,65,-52,-54,65,-54,65,-53,-50,-51,]),'DOTDIV':([20,34,36,60,76,78,79,85,90,91,],[-54,66,-52,-54,66,-54,66,-53,-50,-51,]),'DOTADD':([20,26,34,36,59,60,76,78,79,85,90,91,],[-54,51,-49,-52,51,-54,-47,-54,-48,-53,-50,-51,]),'DOTSUB':([20,26,34,36,59,60,76,78,79,85,90,91,],[-54,52,-49,-52,52,-54,-47,-54,-48,-53,-50,-51,]),')':([33,34,35,36,46,58,59,60,72,74,75,76,78,79,83,84,85,86,87,88,89,90,91,95,96,97,],[-26,-49,-29,-52,68,84,85,-31,-24,-31,-25,-47,-54,-48,100,-30,-53,101,102,-27,-28,-50,-51,-32,-33,-34,]),',':([41,43,44,45,55,56,98,99,],[67,-44,-45,-46,82,-43,82,-42,]),']':([43,44,45,54,55,56,92,98,99,],[-44,-45,-46,80,-41,-43,103,-40,-42,]),'GREATEREQUAL':([47,],[69,]),'EQUALS':([47,],[70,]),'LOWEREQUAL':([47,],[71,]),'{':([68,],[94,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'instructions_opt':([0,],[2,]),'instructions':([0,81,],[3,91,]),'instruction':([0,3,81,91,],[4,10,4,10,]),'assignment':([0,3,81,91,],[5,5,5,5,]),'if_instruction':([0,3,81,91,],[6,6,6,6,]),'MID':([0,3,81,91,],[8,8,8,8,]),'matrix':([12,],[19,]),'expr':([12,24,60,],[20,46,46,]),'matrix_expr':([12,24,64,],[21,47,47,]),'term':([12,24,35,36,60,],[27,27,59,62,27,]),'matrix_term':([12,24,37,38,64,],[28,28,63,66,28,]),'factor':([12,24,35,36,50,51,60,],[29,29,29,29,75,76,29,]),'matrix_factor':([12,24,37,38,52,53,64,],[30,30,30,30,77,78,30,]),'relational_expr':([15,],[33,]),'outerlist':([22,],[39,]),'innerlist':([22,68,],[40,85,]),'elem':([22,68,69,],[41,41,86,]),'instructions_block':([55,],[80,]),}
+_lr_goto_items = {'program':([0,],[1,]),'instructions_opt':([0,],[2,]),'instructions':([0,94,],[3,104,]),'instruction':([0,3,94,104,],[4,10,4,10,]),'assignment':([0,3,94,104,],[5,5,5,5,]),'if_instruction':([0,3,94,104,],[6,6,6,6,]),'MID':([0,3,94,104,],[8,8,8,8,]),'token':([12,13,14,15,16,],[21,37,38,39,40,]),'matrix':([12,13,14,15,16,],[24,24,24,24,24,]),'expr':([12,13,14,15,16,30,73,],[25,25,25,25,25,58,58,]),'matrix_expr':([12,13,14,15,16,30,77,],[26,26,26,26,26,59,59,]),'term':([12,13,14,15,16,30,49,50,73,],[33,33,33,33,33,33,72,75,33,]),'matrix_term':([12,13,14,15,16,30,51,52,77,],[34,34,34,34,34,34,76,79,34,]),'factor':([12,13,14,15,16,30,49,50,63,64,73,],[35,35,35,35,35,35,35,35,88,89,35,]),'matrix_factor':([12,13,14,15,16,30,51,52,65,66,77,],[36,36,36,36,36,36,36,36,90,91,36,]),'elem':([18,28,81,82,],[42,56,56,99,]),'relational_expr':([19,],[46,]),'outerlist':([28,],[54,]),'innerlist':([28,81,],[55,98,]),'instructions_block':([68,],[93,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -36,41 +36,49 @@ _lr_productions = [
   ('instruction -> assignment ;','instruction',2,'p_instruction','Mparser.py',42),
   ('instruction -> if_instruction','instruction',1,'p_instruction','Mparser.py',43),
   ('if_instruction -> IF ( relational_expr ) instructions_block','if_instruction',5,'p_if_instruction','Mparser.py',46),
-  ('assignment -> ID = INTNUM','assignment',3,'p_assignment','Mparser.py',49),
-  ('assignment -> ID = FLONUM','assignment',3,'p_assignment','Mparser.py',50),
-  ('assignment -> ID = matrix','assignment',3,'p_assignment','Mparser.py',51),
-  ('assignment -> ID = expr','assignment',3,'p_assignment','Mparser.py',52),
-  ('assignment -> MID = INTNUM','assignment',3,'p_assignment','Mparser.py',53),
-  ('assignment -> ID = matrix_expr','assignment',3,'p_assignment','Mparser.py',54),
-  ('expr -> expr + term','expr',3,'p_expr','Mparser.py',57),
-  ('expr -> expr - term','expr',3,'p_expr','Mparser.py',58),
-  ('expr -> term','expr',1,'p_expr','Mparser.py',59),
-  ('term -> term * factor','term',3,'p_term','Mparser.py',62),
-  ('term -> term / factor','term',3,'p_term','Mparser.py',63),
-  ('term -> factor','term',1,'p_term','Mparser.py',64),
-  ('factor -> ( expr )','factor',3,'p_factor','Mparser.py',67),
-  ('factor -> ID','factor',1,'p_factor','Mparser.py',68),
-  ('relational_expr -> ID GREATEREQUAL INTNUM','relational_expr',3,'p_relational_expr','Mparser.py',71),
-  ('relational_expr -> ID EQUALS INTNUM','relational_expr',3,'p_relational_expr','Mparser.py',72),
-  ('relational_expr -> ID LOWEREQUAL INTNUM','relational_expr',3,'p_relational_expr','Mparser.py',73),
-  ('MID -> ID [ INTNUM , INTNUM ]','MID',6,'p_MID','Mparser.py',76),
-  ('matrix -> [ outerlist ]','matrix',3,'p_matrix','Mparser.py',79),
-  ('matrix -> ONES ( INTNUM )','matrix',4,'p_matrix','Mparser.py',80),
-  ('matrix -> ZEROS ( INTNUM )','matrix',4,'p_matrix','Mparser.py',81),
-  ('matrix -> EYE ( INTNUM )','matrix',4,'p_matrix','Mparser.py',82),
-  ('outerlist -> outerlist ; innerlist','outerlist',3,'p_outerlist','Mparser.py',85),
-  ('outerlist -> innerlist','outerlist',1,'p_outerlist','Mparser.py',86),
-  ('innerlist -> innerlist , elem','innerlist',3,'p_innerlist','Mparser.py',89),
-  ('innerlist -> elem','innerlist',1,'p_innerlist','Mparser.py',90),
-  ('elem -> ID','elem',1,'p_elem','Mparser.py',93),
-  ('elem -> INTNUM','elem',1,'p_elem','Mparser.py',94),
-  ('elem -> FLONUM','elem',1,'p_elem','Mparser.py',95),
-  ('matrix_expr -> matrix_expr DOTADD matrix_term','matrix_expr',3,'p_matrix_expr','Mparser.py',98),
-  ('matrix_expr -> matrix_expr DOTSUB matrix_term','matrix_expr',3,'p_matrix_expr','Mparser.py',99),
-  ('matrix_expr -> matrix_term','matrix_expr',1,'p_matrix_expr','Mparser.py',100),
-  ('matrix_term -> matrix_term DOTMUL matrix_factor','matrix_term',3,'p_matrix_term','Mparser.py',103),
-  ('matrix_term -> matrix_term DOTDIV matrix_factor','matrix_term',3,'p_matrix_term','Mparser.py',104),
-  ('matrix_term -> matrix_factor','matrix_term',1,'p_matrix_term','Mparser.py',105),
-  ('matrix_factor -> ( matrix_expr )','matrix_factor',3,'p_matrix_facotr','Mparser.py',108),
-  ('matrix_factor -> ID','matrix_factor',1,'p_matrix_facotr','Mparser.py',109),
+  ('assignment -> ID = token','assignment',3,'p_assignment','Mparser.py',49),
+  ('assignment -> MID = elem','assignment',3,'p_assignment','Mparser.py',50),
+  ('assignment -> ID ADDASSIGN token','assignment',3,'p_assignment','Mparser.py',51),
+  ('assignment -> ID SUBASSIGN token','assignment',3,'p_assignment','Mparser.py',52),
+  ('assignment -> ID MULASSIGN token','assignment',3,'p_assignment','Mparser.py',53),
+  ('assignment -> ID DIVASSIGN token','assignment',3,'p_assignment','Mparser.py',54),
+  ('token -> ID','token',1,'p_token','Mparser.py',58),
+  ('token -> INTNUM','token',1,'p_token','Mparser.py',59),
+  ('token -> FLONUM','token',1,'p_token','Mparser.py',60),
+  ('token -> matrix','token',1,'p_token','Mparser.py',61),
+  ('token -> expr','token',1,'p_token','Mparser.py',62),
+  ('token -> matrix_expr','token',1,'p_token','Mparser.py',63),
+  ('token -> - ID','token',2,'p_token','Mparser.py',64),
+  ("token -> ID '",'token',2,'p_token','Mparser.py',65),
+  ('expr -> expr + term','expr',3,'p_expr','Mparser.py',68),
+  ('expr -> expr - term','expr',3,'p_expr','Mparser.py',69),
+  ('expr -> term','expr',1,'p_expr','Mparser.py',70),
+  ('term -> term * factor','term',3,'p_term','Mparser.py',73),
+  ('term -> term / factor','term',3,'p_term','Mparser.py',74),
+  ('term -> factor','term',1,'p_term','Mparser.py',75),
+  ('factor -> ( expr )','factor',3,'p_factor','Mparser.py',78),
+  ('factor -> ID','factor',1,'p_factor','Mparser.py',79),
+  ('relational_expr -> ID GREATEREQUAL INTNUM','relational_expr',3,'p_relational_expr','Mparser.py',82),
+  ('relational_expr -> ID EQUALS INTNUM','relational_expr',3,'p_relational_expr','Mparser.py',83),
+  ('relational_expr -> ID LOWEREQUAL INTNUM','relational_expr',3,'p_relational_expr','Mparser.py',84),
+  ('MID -> ID [ INTNUM , INTNUM ]','MID',6,'p_MID','Mparser.py',87),
+  ('matrix -> [ outerlist ]','matrix',3,'p_matrix','Mparser.py',90),
+  ('matrix -> ONES ( INTNUM )','matrix',4,'p_matrix','Mparser.py',91),
+  ('matrix -> ZEROS ( INTNUM )','matrix',4,'p_matrix','Mparser.py',92),
+  ('matrix -> EYE ( INTNUM )','matrix',4,'p_matrix','Mparser.py',93),
+  ('outerlist -> outerlist ; innerlist','outerlist',3,'p_outerlist','Mparser.py',96),
+  ('outerlist -> innerlist','outerlist',1,'p_outerlist','Mparser.py',97),
+  ('innerlist -> innerlist , elem','innerlist',3,'p_innerlist','Mparser.py',100),
+  ('innerlist -> elem','innerlist',1,'p_innerlist','Mparser.py',101),
+  ('elem -> ID','elem',1,'p_elem','Mparser.py',104),
+  ('elem -> INTNUM','elem',1,'p_elem','Mparser.py',105),
+  ('elem -> FLONUM','elem',1,'p_elem','Mparser.py',106),
+  ('matrix_expr -> matrix_expr DOTADD matrix_term','matrix_expr',3,'p_matrix_expr','Mparser.py',109),
+  ('matrix_expr -> matrix_expr DOTSUB matrix_term','matrix_expr',3,'p_matrix_expr','Mparser.py',110),
+  ('matrix_expr -> matrix_term','matrix_expr',1,'p_matrix_expr','Mparser.py',111),
+  ('matrix_term -> matrix_term DOTMUL matrix_factor','matrix_term',3,'p_matrix_term','Mparser.py',114),
+  ('matrix_term -> matrix_term DOTDIV matrix_factor','matrix_term',3,'p_matrix_term','Mparser.py',115),
+  ('matrix_term -> matrix_factor','matrix_term',1,'p_matrix_term','Mparser.py',116),
+  ('matrix_factor -> ( matrix_expr )','matrix_factor',3,'p_matrix_facotr','Mparser.py',119),
+  ('matrix_factor -> ID','matrix_factor',1,'p_matrix_facotr','Mparser.py',120),
 ]
