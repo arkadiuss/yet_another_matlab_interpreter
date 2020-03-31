@@ -7,11 +7,13 @@ import ply.yacc as yacc
 tokens = scanner.tokens
 
 precedence = (
-   # to fill ...
-   ("left", '+', '-'),
-   # to fill ...
+    ("left", '+', '-'),
+    ("left", '*', '/'),
+    ("left", 'DOTADD', 'DOTSUB'),
+    ("left", 'DOTMUL', 'DOTDIV'),
 )
 
+variables = {}
 
 def p_error(p):
     if p:
@@ -83,29 +85,70 @@ def p_assignment(p):
                   | ID SUBASSIGN token
                   | ID MULASSIGN token
                   | ID DIVASSIGN token"""
+    if p[2] == '=':
+        variables[p[1]] = p[3]
+    elif p[2] == '+=':
+        if p[1] in variables and variables[p[1]] != None:
+            variables[p[1]] = variables[p[1]] + p[3]
+    elif p[2] == '-=':    
+        if p[1] in variables and variables[p[1]] != None:
+            variables[p[1]] = variables[p[1]] - p[3]
+    elif p[2] == '*=':    
+        if p[1] in variables and variables[p[1]] != None:
+            variables[p[1]] = variables[p[1]] * p[3]
+    elif p[2] == '/=':    
+        if p[1] in variables and variables[p[1]] != None:
+            variables[p[1]] = variables[p[1]] / p[3]
+
+def p_token_id(p):
+    """token : ID"""
+    if p[1] in variables:
+        p[0]=variables[p[1]]
+    else:
+        p[0]=0
 
 def p_token(p):
-    """token : ID
-             | INTNUM
+    """token : INTNUM
              | FLONUM
              | matrix
              | expr
              | matrix_expr
              | unary_expr """
+    p[0] = p[1]
 
 def p_expr(p):
     """expr : expr '+' term
             | expr '-' term
             | term """
+    if len(p) < 3:
+        p[0] = p[1]
+    elif p[2] == '+':
+        p[0] = p[1] + p[3]
+    elif p[2] == '-':
+        p[0] = p[1] - p[3]
 
 def p_term(p):
     """term : term '*' factor
             | term '/' factor
             | factor"""
+    if len(p) < 3:
+        p[0]=p[1]
+    elif p[2] == '*':
+        p[0] = p[1] * p[3]
+    elif p[2] == '/':
+        if p[3]==0:
+            p[0] = 0
+            print("Error: division by 0")
+        else:
+            p[0] = p[1] / p[3]
 
 def p_factor(p):
     """factor : '(' expr ')'
               | elem """
+    if p[1] == '(':
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 
 def p_relational_expr(p):
     """relational_expr : expr GREATEREQUAL expr
@@ -114,6 +157,18 @@ def p_relational_expr(p):
                        | expr LOWEREQUAL expr
                        | expr '<' expr
                        | expr '>' expr"""
+    if p[2]=='<=':
+        p[0] = (p[1] <= p[3])
+    elif p[2]=='<':
+        p[0] = (p[1] < p[3])
+    elif p[2]=='>':
+        p[0] = (p[1] > p[3])
+    elif p[2]=='>=':
+        p[0] = (p[1] > p[3])
+    elif p[2]=='==':
+        p[0] = (p[1] == p[3])
+    elif p[2]=='!=':
+        p[0] = (p[1] != p[3])
 
 def p_MID(p):
     """MID : ID '[' INTNUM ',' INTNUM ']' """
@@ -132,10 +187,17 @@ def p_innerlist(p):
     """innerlist : innerlist ',' elem
                  | elem"""
 
+def p_elem_id(p):
+    """elem : ID"""
+    if p[1] in variables:
+        p[0] = variables[p[1]]
+    else:
+        p[0]=0
+
 def p_elem(p):
-    """elem : ID
-            | INTNUM
+    """elem : INTNUM
             | FLONUM"""
+    p[0] = p[1]
 
 def p_matrix_expr(p):
     """matrix_expr : matrix_expr DOTADD matrix_term
@@ -149,15 +211,17 @@ def p_matrix_term(p):
 
 def p_matrix_factor(p):
     """matrix_factor : '(' matrix_expr ')'
-                     | matrix_elem"""
+                     | matrix 
+                     | ID """
 
 def p_unary_expr(p):
     """unary_expr : '-' ID
                   | ID \"'\" """ 
-
-def p_matrix_elem(p):
-    """matrix_elem : ID
-                   | matrix"""
+    if p[1] == '-':
+        if p[2] in variables:
+            p[0] = -variables[p[2]]
+        else:
+            p[0] = 0
 
 parser = yacc.yacc()
 
