@@ -2,12 +2,12 @@ import ply.lex as lex
 
 reserved = {
     'if': 'IF',
-    'then': 'THEN',
     'else': 'ELSE',
     'while': 'WHILE',
+    'for': 'FOR',
     'break': 'BREAK',
     'continue': 'CONTINUE',
-    'return': 'return',
+    'return': 'RETURN',
     'eye': 'EYE',
     'zeros': 'ZEROS',
     'ones': 'ONES',
