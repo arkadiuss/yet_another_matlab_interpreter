@@ -53,7 +53,6 @@ def p_assignment(p):
                   | ID MULASSIGN token
                   | ID DIVASSIGN token"""
 
-#TODO C = B'
 def p_token(p):
     """token : ID
              | INTNUM
