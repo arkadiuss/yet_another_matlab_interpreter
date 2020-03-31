@@ -50,7 +50,9 @@ def p_assignment(p):
                   | ID '=' FLONUM
                   | ID '=' matrix
                   | ID '=' expr 
-                  | MID '=' INTNUM"""
+                  | MID '=' INTNUM
+                  | ID '=' matrix_expr"""
+
 def p_expr(p):
     """expr : expr '+' term
             | expr '-' term
@@ -91,6 +93,20 @@ def p_elem(p):
     """elem : ID
             | INTNUM
             | FLONUM"""
+
+def p_matrix_expr(p):
+    """matrix_expr : matrix_expr DOTADD matrix_term
+                   | matrix_expr DOTSUB matrix_term
+                   | matrix_term"""
+
+def p_matrix_term(p):
+    """matrix_term : matrix_term DOTMUL matrix_factor
+                   | matrix_term DOTDIV matrix_factor
+                   | matrix_factor"""
+
+def p_matrix_facotr(p):
+    """matrix_factor : '(' matrix_expr ')'
+                     | ID"""
 
 parser = yacc.yacc()
 
