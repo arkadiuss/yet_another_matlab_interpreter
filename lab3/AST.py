@@ -44,19 +44,80 @@ class Instruction(Node):
     def __init__(self, instruction):
         self.instruction = instruction
 
+class IfInstruction(Node):
+     def __init__(self, condition, instructions, else_block):
+         self.condition = condition
+         self.instructions = instructions
+         self.else_block = else_block
 
-# TODO nwm czy nie lepiej bedzie to podzielic w MParserze na osobne przypadki
-# class IfInstruction(Node):
-#     def __init__(self):
+class ElseInstruction(Node):
+    def __init__(self, instructions):
+        self.instructions = instructions
 
 
-# | for_instruction
-# | while_instruction
-# | print_instruction
-# | loop_instruction
-# | return_instruction
-# | instructions_block
+class ForInstruction(Node):
+    def __init__(self, variable, start, end, instructions):
+        self.variable = variable
+        self.start = start
+        self.end = end
+        self.instructions = instructions 
 
+class WhileInstruction(Node):
+    def __init__(self, condition, instructions):
+        self.condition = condition
+        self.instructions = instructions 
+
+class PrintInstruction(Node):
+    def __init__(self, print_list):
+        self.print_list = print_list 
+
+class PrintList(Node):
+    def __init__(self, print_list, print_expr):
+        self.print_list = print_list
+        self.print_expr = print_expr 
+
+class LoopInstruction(Node):
+    def __init__(self, instruction):
+        self.instruction = instruction 
+
+class ReturnInstruction(Node):
+    pass
+
+class Token(Node):
+    def __init__(self, token):
+        self.token = token
+
+class Expression(Node):
+    def __init__(self, expr, sign, term):
+        self.expr = expr
+        self.sign = sign
+        self.term = term
+
+class Matrix(Node):
+    def __init__(self, matrix):
+        self.matrix = matrix
+
+class Eye(Node):
+    def __init__(self, n):
+        self.n = n
+
+class Zeros(Node):
+    def __init__(self, n):
+        self.n = n
+
+class Ones(Node):
+    def __init__(self, n):
+        self.n = n
+
+class Outerlist(Node):
+    def __init__(self, outerlist, innerlist):
+        self.outerlist = outerlist
+        self.innerlist = innerlist
+
+class Innerlist(Node):
+    def __init__(self, innerlist, elem):
+        self.innerlist = innerlist
+        self.elem = elem
 # ...
 # fill out missing classes
 # ...

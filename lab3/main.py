@@ -21,4 +21,3 @@ if __name__ == '__main__':
     # text = 'A = B + C;'
     ast = parser.parse(text, lexer=scanner.lexer)
     res = ast.printTree()
-    print(res)
