@@ -2,7 +2,7 @@
 
 import scanner
 import ply.yacc as yacc
-
+from AST import *
 
 tokens = scanner.tokens
 
@@ -24,19 +24,22 @@ def p_error(p):
 
 def p_program(p):
     """program : instructions_opt"""
+    p[0] = Program(p[1])
 
 def p_instructions_opt(p):
     """instructions_opt : instructions
                         | """
+    p[0] = InstructionsOpt(p[1])
 
 def p_instructions_block(p):
     """instructions_block : '{' instructions '}'"""
 
-def p_instructions(p):
+def p_instructions_1(p):
     """instructions : instructions instruction
                     | instruction """
+    p[0] = Instructions(p[1], p[2]) if len(p) == 3 else Instructions(None, p[1])
 
-def p_instruction(p):
+def p_instruction_1(p):
     """instruction : assignment ';'
                    | if_instruction
                    | for_instruction
@@ -45,6 +48,7 @@ def p_instruction(p):
                    | loop_instruction
                    | return_instruction
                    | instructions_block"""
+    p[0] = Instruction(p[1])
 
 def p_if_instruction(p):
     """if_instruction : IF '(' relational_expr ')' instructions_block
@@ -99,6 +103,7 @@ def p_assignment(p):
     elif p[2] == '/=':    
         if p[1] in variables and variables[p[1]] != None:
             variables[p[1]] = variables[p[1]] / p[3]
+    p[0] = BinExpr(p[2], p[1], p[3])
 
 def p_token_id(p):
     """token : ID"""

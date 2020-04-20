@@ -18,8 +18,41 @@ class TreePrinter:
 
     @addToClass(AST.IntNum)
     def printTree(self, indent=0):
-        pass
-        # fill in the body
+        return get_indent(indent) + self.value + "\n"
+
+    @addToClass(AST.FloatNum)
+    def printTree(self, indent=0):
+        return get_indent(indent) + self.value + "\n"
+
+    @addToClass(AST.Variable)
+    def printTree(self, indent=0):
+        return get_indent(indent) + self.name + "\n"
+
+    @addToClass(AST.BinExpr)
+    def printTree(self, indent=0):
+        res = get_indent(indent) + self.op + "\n"
+        res += self.left.printTree(indent+1)
+        res += self.right.printTree(indent+1)
+        return get_indent(indent) + self.value + "\n"
+
+    @addToClass(AST.Program)
+    def printTree(self, indent=0):
+        return self.instructions_opt.printTree()
+
+    @addToClass(AST.InstructionsOpt)
+    def printTree(self, indent=0):
+        return self.instructions.printTree()
+
+    @addToClass(AST.Instructions)
+    def printTree(self, indent=0):
+        res = self.instruction.printTree(indent)
+        if self.instructions is not None:
+            res += self.instructions.printTree(indent)
+        return res
+
+    @addToClass(AST.Instruction)
+    def printTree(self, indent=0):
+        self.instruction.printTree(indent)
 
     @addToClass(AST.Error)
     def printTree(self, indent=0):
@@ -29,3 +62,6 @@ class TreePrinter:
     # define printTree for other classes
     # ...
 
+
+def get_indent(indent):
+    return "| " * indent
