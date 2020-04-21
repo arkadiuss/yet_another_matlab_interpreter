@@ -27,8 +27,7 @@ def p_program(p):
     p[0] = Program(p[1])
 
 def p_instructions_opt(p):
-    """instructions_opt : instructions
-                        | """
+    """instructions_opt : instructions"""
     p[0] = InstructionsOpt(p[1])
 
 def p_instructions_block(p):
@@ -253,25 +252,43 @@ def p_matrix_expr(p):
     """matrix_expr : matrix_expr DOTADD matrix_term
                    | matrix_expr DOTSUB matrix_term
                    | matrix_term"""
+    if len(p) > 2:
+        p[0] = BinExpr(p[2], p[1], p[3])
+    else:
+        p[0] = p[1]
 
 def p_matrix_term(p):
     """matrix_term : matrix_term DOTMUL matrix_factor
                    | matrix_term DOTDIV matrix_factor
                    | matrix_factor"""
+    if len(p) > 2:
+        p[0] = BinExpr(p[2], p[1], p[3])
+    else:
+        p[0] = p[1]
 
-def p_matrix_factor(p):
+def p_matrix_factor_1(p):
     """matrix_factor : '(' matrix_expr ')'
-                     | matrix 
-                     | ID """
+                     | matrix""" 
+    if p[1] == '(':
+        p[0]=p[2]
+    else:
+        p[0]=p[1]
+
+def p_matrix_factor_2(p):
+    """matrix_factor : ID""" 
+    p[0]=Variable(p[1])
 
 def p_unary_expr(p):
     """unary_expr : '-' ID
                   | ID \"'\" """ 
     if p[1] == '-':
-        if p[2] in variables:
-            p[0] = -variables[p[2]]
-        else:
-            p[0] = 0
+        #if p[2] in variables:
+        #    p[0] = -variables[p[2]]
+        #else:
+        #    p[0] = 0
+        p[0] = UnaryExpr('-', Variable(p[2]))
+    else:
+        p[0] = UnaryExpr("'", Variable(p[1]))
 
 def p_int(p):
     """int : INTNUM """

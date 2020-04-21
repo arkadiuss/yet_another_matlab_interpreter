@@ -35,7 +35,7 @@ tokens = [
 ]
 tokens += list(reserved.values())
 
-literals = "+-*/=();,':[]{}<>"
+literals = "'+-*/=();,:[]{}<>"
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'

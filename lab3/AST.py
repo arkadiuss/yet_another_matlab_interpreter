@@ -142,6 +142,10 @@ class Innerlist(Node):
         self.innerlist = innerlist
         self.elem = elem
 
+class UnaryExpr(Node):
+    def __init__(self, op, arg):
+        self.op = op
+        self.arg = arg
 
 # ...
 # fill out missing classes

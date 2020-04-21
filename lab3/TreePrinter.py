@@ -89,11 +89,16 @@ class TreePrinter:
 
     @addToClass(AST.PrintInstruction)
     def printTree(self, indent=0):
-        pass
+        res = get_indent(indent) + "PRINT\n"
+        res += self.print_list.printTree(indent+1)
+        return res
 
     @addToClass(AST.PrintList)
     def printTree(self, indent=0):
-        pass
+        res = self.print_expr.printTree(indent)
+        if self.print_list is not None:
+            res += self.print_list.printTree(indent)
+        return res
 
     @addToClass(AST.LoopInstruction)
     def printTree(self, indent=0):
@@ -158,6 +163,12 @@ class TreePrinter:
         res = self.elem.printTree(indent)
         if self.innerlist is not None:
             res += self.innerlist.printTree(indent)
+        return res
+    
+    @addToClass(AST.UnaryExpr)
+    def printTree(self, indent=0):
+        res = get_indent(indent) + self.op + "\n"
+        res += self.arg.printTree(indent+1)
         return res
 
     @addToClass(AST.Error)
