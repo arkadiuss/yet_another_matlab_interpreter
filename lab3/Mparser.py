@@ -7,6 +7,7 @@ from AST import *
 tokens = scanner.tokens
 
 precedence = (
+    ("left", '-', "'"),
     ("left", '+', '-'),
     ("left", '*', '/'),
     ("left", 'DOTADD', 'DOTSUB'),
@@ -279,8 +280,8 @@ def p_matrix_factor_2(p):
     p[0]=Variable(p[1])
 
 def p_unary_expr(p):
-    """unary_expr : '-' ID
-                  | ID \"'\" """ 
+    """unary_expr : '-' expr
+                  | matrix_expr \"'\" """ 
     if p[1] == '-':
         #if p[2] in variables:
         #    p[0] = -variables[p[2]]
@@ -288,7 +289,7 @@ def p_unary_expr(p):
         #    p[0] = 0
         p[0] = UnaryExpr('-', Variable(p[2]))
     else:
-        p[0] = UnaryExpr("'", Variable(p[1]))
+        p[0] = UnaryExpr("'", p[1])
 
 def p_int(p):
     """int : INTNUM """
