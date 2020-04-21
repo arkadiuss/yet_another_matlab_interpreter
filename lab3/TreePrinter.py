@@ -148,11 +148,17 @@ class TreePrinter:
 
     @addToClass(AST.Outerlist)
     def printTree(self, indent=0):
-        pass
+        res = self.innerlist.printTree(indent)
+        if self.outerlist is not None:
+            res += self.outerlist.printTree(indent)
+        return res
 
     @addToClass(AST.Innerlist)
     def printTree(self, indent=0):
-        pass
+        res = self.elem.printTree(indent)
+        if self.innerlist is not None:
+            res += self.innerlist.printTree(indent)
+        return res
 
     @addToClass(AST.Error)
     def printTree(self, indent=0):

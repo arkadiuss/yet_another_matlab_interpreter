@@ -220,9 +220,9 @@ def p_matrix_4(p):
     """matrix : EYE '(' int ')'"""
     p[0]=Matrix(Eye(p[3]))
 
-# def p_outerlist_1(p):
-#     """outerlist : outerlist ',' '[' innerlist ']''"""
-#     p[0] = Outerlist(p[1], p[4])
+def p_outerlist_1(p):
+     """outerlist : outerlist ',' '[' innerlist ']'"""
+     p[0] = Outerlist(p[1], p[4])
 
 def p_outerlist_2(p):
     """outerlist : '[' innerlist ']'"""
