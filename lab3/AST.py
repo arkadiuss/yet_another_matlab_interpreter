@@ -130,6 +130,9 @@ class Ones(Node):
     def __init__(self, n):
         self.n = n
 
+class Vector(Node):
+    def __init__(self, outerlist):
+        self.outerlist = outerlist
 
 class Outerlist(Node):
     def __init__(self, outerlist, innerlist):

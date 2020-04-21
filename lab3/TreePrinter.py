@@ -132,6 +132,12 @@ class TreePrinter:
     @addToClass(AST.Matrix)
     def printTree(self, indent=0):
         return self.matrix.printTree(indent)
+    
+    @addToClass(AST.Vector)
+    def printTree(self, indent=0):
+        res = get_indent(indent) + "VECTOR\n"
+        res += self.outerlist.printTree(indent+1)
+        return res
 
     @addToClass(AST.Eye)
     def printTree(self, indent=0):
@@ -153,7 +159,8 @@ class TreePrinter:
 
     @addToClass(AST.Outerlist)
     def printTree(self, indent=0):
-        res = self.innerlist.printTree(indent)
+        res = get_indent(indent) + "VECTOR\n"
+        res += self.innerlist.printTree(indent+1)
         if self.outerlist is not None:
             res += self.outerlist.printTree(indent)
         return res

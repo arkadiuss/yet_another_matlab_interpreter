@@ -205,8 +205,8 @@ def p_MID(p):
     p[0] = Mid(p[1], p[3], p[5])
 
 def p_matrix_1(p):
-    """matrix : '[' outerlist ']'"""
-    p[0]=Matrix(p[2])
+    """matrix : vector"""
+    p[0]=Matrix(p[1])
 
 def p_matrix_2(p):
     """matrix : ONES '(' int ')'"""
@@ -219,6 +219,10 @@ def p_matrix_3(p):
 def p_matrix_4(p):
     """matrix : EYE '(' int ')'"""
     p[0]=Matrix(Eye(p[3]))
+
+def p_vector(p):
+    """vector : '[' outerlist ']'"""
+    p[0]=Vector(p[2])
 
 def p_outerlist_1(p):
      """outerlist : outerlist ',' '[' innerlist ']'"""
