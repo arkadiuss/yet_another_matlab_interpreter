@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     try:
         # filename = sys.argv[1] if len(sys.argv) > 1 else "example.txt"
-        filename = "example1.m"
+        filename = "example3.m"
         file = open(filename, "r")
     except IOError:
         print("Cannot open {0} file".format(filename))
@@ -18,6 +18,6 @@ if __name__ == '__main__':
 
     parser = Mparser.parser
     text = file.read()
-    # text = 'A = B + C;'
     ast = parser.parse(text, lexer=scanner.lexer)
     res = ast.printTree()
+    print(res)

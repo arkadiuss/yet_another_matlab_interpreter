@@ -35,10 +35,10 @@ def p_instructions_block(p):
     """instructions_block : '{' instructions '}'"""
     p[0] = Instructions(p[2], None)
 
-def p_instructions_1(p):
-    """instructions : instructions instruction
+def p_instructions(p):
+    """instructions : instruction instructions
                     | instruction """
-    p[0] = Instructions(p[1], p[2]) if len(p) == 3 else Instructions(None, p[1])
+    p[0] = Instructions(p[1], p[2]) if len(p) == 3 else Instructions(p[1], None)
 
 def p_instruction_1(p):
     """instruction : assignment ';'
@@ -80,7 +80,7 @@ def p_loop_intruction(p):
 
 def p_return_instruction(p):
     """return_instruction : RETURN expr ';'"""
-    p[0] = ReturnInstruction()
+    p[0] = ReturnInstruction(p[2])
 
 def p_print_instruction(p):
     """print_instruction : PRINT print_list ';'"""
@@ -94,11 +94,10 @@ def p_print_list_1(p):
 def p_print_list_2(p):
     """print_list : expr
                   | STRING"""
-    p[0] = PrintList(None, p[1])              
+    p[0] = PrintList(None, p[1])
 
-def p_assignment(p):
+def p_assignment_1(p):
     """assignment : ID '=' token
-                  | MID '=' elem
                   | ID ADDASSIGN token
                   | ID SUBASSIGN token
                   | ID MULASSIGN token
@@ -117,6 +116,11 @@ def p_assignment(p):
     elif p[2] == '/=':    
         if p[1] in variables and variables[p[1]] != None:
             variables[p[1]] = variables[p[1]] / p[3]
+    p[0] = BinExpr(p[2], Variable(p[1]), p[3])
+
+def p_assignment_2(p):
+    """assignment : MID '=' elem"""
+    variables[p[1]] = p[3]
     p[0] = BinExpr(p[2], p[1], p[3])
 
 def p_token_id(p):
@@ -128,8 +132,8 @@ def p_token_id(p):
         p[0] = Token(0)
 
 def p_token(p):
-    """token : INTNUM
-             | FLONUM
+    """token : int
+             | float
              | matrix
              | expr
              | matrix_expr
@@ -198,36 +202,37 @@ def p_relational_expr(p):
 
 def p_MID(p):
     """MID : ID '[' INTNUM ',' INTNUM ']' """
+    p[0] = Mid(p[1], p[3], p[5])
 
-def p_matrix(p):
+def p_matrix_1(p):
     """matrix : '[' outerlist ']'"""
     p[0]=Matrix(p[2])
 
-def p_matrix(p):
-    """matrix : ONES '(' INTNUM ')'"""
+def p_matrix_2(p):
+    """matrix : ONES '(' int ')'"""
     p[0]=Matrix(Ones(p[3]))
     
-def p_matrix(p):
-    """matrix : ZEROS '(' INTNUM ')'"""
+def p_matrix_3(p):
+    """matrix : ZEROS '(' int ')'"""
     p[0]=Matrix(Zeros(p[3]))
 
-def p_matrix(p):
-    """matrix : EYE '(' INTNUM ')'"""
+def p_matrix_4(p):
+    """matrix : EYE '(' int ')'"""
     p[0]=Matrix(Eye(p[3]))
 
-def p_outerlist(p):
-    """outerlist : outerlist ',' '[' innerlist ']''"""
-    p[0] = Outerlist(p[1], p[4])
+# def p_outerlist_1(p):
+#     """outerlist : outerlist ',' '[' innerlist ']''"""
+#     p[0] = Outerlist(p[1], p[4])
 
-def p_outerlist(p):
+def p_outerlist_2(p):
     """outerlist : '[' innerlist ']'"""
     p[0] = Outerlist(None, p[2])
 
-def p_innerlist(p):
+def p_innerlist_1(p):
     """innerlist : innerlist ',' elem"""
     p[0] = Innerlist(p[1], p[3])
 
-def p_innerlist(p):
+def p_innerlist_2(p):
     """innerlist : elem"""
     p[0] = Innerlist(None, p[1])
 
@@ -237,12 +242,12 @@ def p_elem_id(p):
     #    p[0] = variables[p[1]]
     #else:
     #    p[0]=0
-    p[0] = p[1]
+    p[0] = Variable(p[1])
 
 def p_elem(p):
-    """elem : INTNUM
-            | FLONUM"""
-    p[0] = p[1]
+    """elem : int
+            | float"""
+    p[0] = Token(p[1])
 
 def p_matrix_expr(p):
     """matrix_expr : matrix_expr DOTADD matrix_term
@@ -267,6 +272,15 @@ def p_unary_expr(p):
             p[0] = -variables[p[2]]
         else:
             p[0] = 0
+
+def p_int(p):
+    """int : INTNUM """
+    p[0] = IntNum(p[1])
+
+def p_float(p):
+    """float : FLONUM"""
+    p[0] = FloatNum(p[1])
+
 
 parser = yacc.yacc()
 
