@@ -1,5 +1,5 @@
 
-x = 0, 
+x = 0; 
 y = zeros(5);
 z = x + y;
 
@@ -16,4 +16,4 @@ x = zeros(5);
 y = zeros(5,7);
 z = x + y;
 
-x = ones(3,5)
+x = ones(3,5);

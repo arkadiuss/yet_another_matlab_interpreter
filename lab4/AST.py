@@ -76,17 +76,15 @@ class PrintInstruction(Node):
         self.print_list = print_list
 
 
-class PrintList(Node):
-    def __init__(self, print_list, print_expr):
-        self.print_list = print_list
-        self.print_expr = print_expr
-
+class ArgsList(Node):
+    def __init__(self, args_list, arg):
+        self.args_list = args_list 
+        self.arg = arg
 
 class LoopInstruction(Node):
     def __init__(self, instruction):
-        self.instruction = instruction
-
-
+        self.instruction = instruction 
+        
 class ReturnInstruction(Node):
     def __init__(self, expr):
         self.expr = expr
@@ -149,10 +147,6 @@ class UnaryExpr(Node):
     def __init__(self, op, arg):
         self.op = op
         self.arg = arg
-
-# ...
-# fill out missing classes
-# ...
 
 class Error(Node):
     def __init__(self):

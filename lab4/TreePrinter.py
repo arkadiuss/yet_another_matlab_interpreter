@@ -93,11 +93,11 @@ class TreePrinter:
         res += self.print_list.printTree(indent+1)
         return res
 
-    @addToClass(AST.PrintList)
+    @addToClass(AST.ArgsList)
     def printTree(self, indent=0):
-        res = self.print_expr.printTree(indent)
-        if self.print_list is not None:
-            res += self.print_list.printTree(indent)
+        res = self.arg.printTree(indent)
+        if self.args_list is not None:
+            res += self.args_list.printTree(indent)
         return res
 
     @addToClass(AST.LoopInstruction)

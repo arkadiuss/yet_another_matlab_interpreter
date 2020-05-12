@@ -33,11 +33,11 @@ Rule 23    while_instruction -> WHILE ( relational_expr ) instruction
 Rule 24    loop_instruction -> BREAK ;
 Rule 25    loop_instruction -> CONTINUE ;
 Rule 26    return_instruction -> RETURN expr ;
-Rule 27    print_instruction -> PRINT print_list ;
-Rule 28    print_list -> print_list , expr
-Rule 29    print_list -> print_list , STRING
-Rule 30    print_list -> expr
-Rule 31    print_list -> STRING
+Rule 27    print_instruction -> PRINT args_list ;
+Rule 28    args_list -> args_list , expr
+Rule 29    args_list -> args_list , STRING
+Rule 30    args_list -> expr
+Rule 31    args_list -> STRING
 Rule 32    assignment -> ID = token
 Rule 33    assignment -> ID ADDASSIGN token
 Rule 34    assignment -> ID SUBASSIGN token
@@ -67,40 +67,41 @@ Rule 57    relational_expr -> expr < expr
 Rule 58    relational_expr -> expr > expr
 Rule 59    MID -> ID [ INTNUM , INTNUM ]
 Rule 60    matrix -> [ outerlist ]
-Rule 61    matrix -> ONES ( int )
-Rule 62    matrix -> ZEROS ( int )
-Rule 63    matrix -> EYE ( int )
+Rule 61    matrix -> ONES ( args_list )
+Rule 62    matrix -> ZEROS ( args_list )
+Rule 63    matrix -> EYE ( args_list )
 Rule 64    vector -> [ innerlist ]
 Rule 65    outerlist -> outerlist ; innerlist
 Rule 66    outerlist -> innerlist
 Rule 67    innerlist -> innerlist , elem
 Rule 68    innerlist -> elem
-Rule 69    elem -> ID
-Rule 70    elem -> int
-Rule 71    elem -> float
-Rule 72    matrix_expr -> matrix_expr DOTADD matrix_term
-Rule 73    matrix_expr -> matrix_expr DOTSUB matrix_term
-Rule 74    matrix_expr -> matrix_term
-Rule 75    matrix_term -> matrix_term DOTMUL matrix_factor
-Rule 76    matrix_term -> matrix_term DOTDIV matrix_factor
-Rule 77    matrix_term -> matrix_factor
-Rule 78    matrix_factor -> ( matrix_expr )
-Rule 79    matrix_factor -> matrix
-Rule 80    matrix_factor -> ID
-Rule 81    unary_expr -> - expr
-Rule 82    unary_expr -> matrix_expr '
-Rule 83    int -> INTNUM
-Rule 84    float -> FLONUM
+Rule 69    innerlist -> <empty>
+Rule 70    elem -> ID
+Rule 71    elem -> int
+Rule 72    elem -> float
+Rule 73    matrix_expr -> matrix_expr DOTADD matrix_term
+Rule 74    matrix_expr -> matrix_expr DOTSUB matrix_term
+Rule 75    matrix_expr -> matrix_term
+Rule 76    matrix_term -> matrix_term DOTMUL matrix_factor
+Rule 77    matrix_term -> matrix_term DOTDIV matrix_factor
+Rule 78    matrix_term -> matrix_factor
+Rule 79    matrix_factor -> ( matrix_expr )
+Rule 80    matrix_factor -> matrix
+Rule 81    matrix_factor -> ID
+Rule 82    unary_expr -> - expr
+Rule 83    unary_expr -> matrix_expr '
+Rule 84    int -> INTNUM
+Rule 85    float -> FLONUM
 
 Terminals, with rules where they appear
 
-'                    : 82
-(                    : 14 15 16 17 22 23 51 61 62 63 78
-)                    : 14 15 16 17 22 23 51 61 62 63 78
+'                    : 83
+(                    : 14 15 16 17 22 23 51 61 62 63 79
+)                    : 14 15 16 17 22 23 51 61 62 63 79
 *                    : 48
 +                    : 45
 ,                    : 28 29 59 67
--                    : 46 81
+-                    : 46 82
 /                    : 49
 :                    : 18 19 20 21
 ;                    : 6 24 25 26 27 65
@@ -112,19 +113,19 @@ BREAK                : 24
 COMMENT              : 
 CONTINUE             : 25
 DIVASSIGN            : 36
-DOTADD               : 72
-DOTDIV               : 76
-DOTMUL               : 75
-DOTSUB               : 73
+DOTADD               : 73
+DOTDIV               : 77
+DOTMUL               : 76
+DOTSUB               : 74
 ELSE                 : 16 17
 EQUALS               : 54
 EYE                  : 63
-FLONUM               : 84
+FLONUM               : 85
 FOR                  : 18 19 20 21
 GREATEREQUAL         : 53
-ID                   : 18 18 19 19 20 20 20 21 21 21 32 33 34 35 36 38 59 69 80
+ID                   : 18 18 19 19 20 20 20 21 21 21 32 33 34 35 36 38 59 70 81
 IF                   : 14 15 16 17
-INTNUM               : 18 19 59 59 83
+INTNUM               : 18 19 59 59 84
 LOWEREQUAL           : 56
 MULASSIGN            : 35
 NOTEQUALS            : 55
@@ -144,11 +145,12 @@ error                :
 Nonterminals, with rules where they appear
 
 MID                  : 37
+args_list            : 27 28 29 61 62 63
 assignment           : 6
 elem                 : 37 52 67 68
-expr                 : 26 28 30 42 45 46 51 53 53 54 54 55 55 56 56 57 57 58 58 81
+expr                 : 26 28 30 42 45 46 51 53 53 54 54 55 55 56 56 57 57 58 58 82
 factor               : 48 49 50
-float                : 40 71
+float                : 40 72
 for_instruction      : 8
 if_instruction       : 7
 innerlist            : 64 65 66 67
@@ -156,15 +158,14 @@ instruction          : 4 5 15 16 17 17 19 21 23
 instructions         : 2 3 4
 instructions_block   : 13 14 16 18 20 22
 instructions_opt     : 1
-int                  : 39 61 62 63 70
+int                  : 39 71
 loop_instruction     : 11
-matrix               : 41 79
-matrix_expr          : 43 72 73 78 82
-matrix_factor        : 75 76 77
-matrix_term          : 72 73 74 75 76
+matrix               : 41 80
+matrix_expr          : 43 73 74 79 83
+matrix_factor        : 76 77 78
+matrix_term          : 73 74 75 76 77
 outerlist            : 60 65
 print_instruction    : 10
-print_list           : 27 28 29
 program              : 0
 relational_expr      : 14 15 16 17 22 23
 return_instruction   : 12
@@ -207,7 +208,7 @@ state 0
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;
@@ -288,7 +289,7 @@ state 4
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;
@@ -506,11 +507,11 @@ state 17
 
 state 18
 
-    (27) print_instruction -> PRINT . print_list ;
-    (28) print_list -> . print_list , expr
-    (29) print_list -> . print_list , STRING
-    (30) print_list -> . expr
-    (31) print_list -> . STRING
+    (27) print_instruction -> PRINT . args_list ;
+    (28) args_list -> . args_list , expr
+    (29) args_list -> . args_list , STRING
+    (30) args_list -> . expr
+    (31) args_list -> . STRING
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
@@ -519,11 +520,11 @@ state 18
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     STRING          shift and go to state 37
     (               shift and go to state 40
@@ -531,7 +532,7 @@ state 18
     INTNUM          shift and go to state 45
     FLONUM          shift and go to state 46
 
-    print_list                     shift and go to state 35
+    args_list                      shift and go to state 35
     expr                           shift and go to state 36
     term                           shift and go to state 38
     factor                         shift and go to state 39
@@ -564,11 +565,11 @@ state 21
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -611,7 +612,7 @@ state 22
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;
@@ -676,34 +677,34 @@ state 25
     (42) token -> . expr
     (43) token -> . matrix_expr
     (44) token -> . unary_expr
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
-    (72) matrix_expr -> . matrix_expr DOTADD matrix_term
-    (73) matrix_expr -> . matrix_expr DOTSUB matrix_term
-    (74) matrix_expr -> . matrix_term
-    (81) unary_expr -> . - expr
-    (82) unary_expr -> . matrix_expr '
+    (73) matrix_expr -> . matrix_expr DOTADD matrix_term
+    (74) matrix_expr -> . matrix_expr DOTSUB matrix_term
+    (75) matrix_expr -> . matrix_term
+    (82) unary_expr -> . - expr
+    (83) unary_expr -> . matrix_expr '
     (48) term -> . term * factor
     (49) term -> . term / factor
     (50) term -> . factor
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
 
     ID              shift and go to state 51
     INTNUM          shift and go to state 45
@@ -738,34 +739,34 @@ state 26
     (42) token -> . expr
     (43) token -> . matrix_expr
     (44) token -> . unary_expr
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
-    (72) matrix_expr -> . matrix_expr DOTADD matrix_term
-    (73) matrix_expr -> . matrix_expr DOTSUB matrix_term
-    (74) matrix_expr -> . matrix_term
-    (81) unary_expr -> . - expr
-    (82) unary_expr -> . matrix_expr '
+    (73) matrix_expr -> . matrix_expr DOTADD matrix_term
+    (74) matrix_expr -> . matrix_expr DOTSUB matrix_term
+    (75) matrix_expr -> . matrix_term
+    (82) unary_expr -> . - expr
+    (83) unary_expr -> . matrix_expr '
     (48) term -> . term * factor
     (49) term -> . term / factor
     (50) term -> . factor
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
 
     ID              shift and go to state 51
     INTNUM          shift and go to state 45
@@ -800,34 +801,34 @@ state 27
     (42) token -> . expr
     (43) token -> . matrix_expr
     (44) token -> . unary_expr
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
-    (72) matrix_expr -> . matrix_expr DOTADD matrix_term
-    (73) matrix_expr -> . matrix_expr DOTSUB matrix_term
-    (74) matrix_expr -> . matrix_term
-    (81) unary_expr -> . - expr
-    (82) unary_expr -> . matrix_expr '
+    (73) matrix_expr -> . matrix_expr DOTADD matrix_term
+    (74) matrix_expr -> . matrix_expr DOTSUB matrix_term
+    (75) matrix_expr -> . matrix_term
+    (82) unary_expr -> . - expr
+    (83) unary_expr -> . matrix_expr '
     (48) term -> . term * factor
     (49) term -> . term / factor
     (50) term -> . factor
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
 
     ID              shift and go to state 51
     INTNUM          shift and go to state 45
@@ -862,34 +863,34 @@ state 28
     (42) token -> . expr
     (43) token -> . matrix_expr
     (44) token -> . unary_expr
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
-    (72) matrix_expr -> . matrix_expr DOTADD matrix_term
-    (73) matrix_expr -> . matrix_expr DOTSUB matrix_term
-    (74) matrix_expr -> . matrix_term
-    (81) unary_expr -> . - expr
-    (82) unary_expr -> . matrix_expr '
+    (73) matrix_expr -> . matrix_expr DOTADD matrix_term
+    (74) matrix_expr -> . matrix_expr DOTSUB matrix_term
+    (75) matrix_expr -> . matrix_term
+    (82) unary_expr -> . - expr
+    (83) unary_expr -> . matrix_expr '
     (48) term -> . term * factor
     (49) term -> . term / factor
     (50) term -> . factor
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
 
     ID              shift and go to state 51
     INTNUM          shift and go to state 45
@@ -924,34 +925,34 @@ state 29
     (42) token -> . expr
     (43) token -> . matrix_expr
     (44) token -> . unary_expr
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
-    (72) matrix_expr -> . matrix_expr DOTADD matrix_term
-    (73) matrix_expr -> . matrix_expr DOTSUB matrix_term
-    (74) matrix_expr -> . matrix_term
-    (81) unary_expr -> . - expr
-    (82) unary_expr -> . matrix_expr '
+    (73) matrix_expr -> . matrix_expr DOTADD matrix_term
+    (74) matrix_expr -> . matrix_expr DOTSUB matrix_term
+    (75) matrix_expr -> . matrix_term
+    (82) unary_expr -> . - expr
+    (83) unary_expr -> . matrix_expr '
     (48) term -> . term * factor
     (49) term -> . term / factor
     (50) term -> . factor
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
 
     ID              shift and go to state 51
     INTNUM          shift and go to state 45
@@ -986,11 +987,11 @@ state 30
 state 31
 
     (37) assignment -> MID = . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     ID              shift and go to state 42
     INTNUM          shift and go to state 45
@@ -1020,11 +1021,11 @@ state 32
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -1067,11 +1068,11 @@ state 34
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -1088,9 +1089,9 @@ state 34
 
 state 35
 
-    (27) print_instruction -> PRINT print_list . ;
-    (28) print_list -> print_list . , expr
-    (29) print_list -> print_list . , STRING
+    (27) print_instruction -> PRINT args_list . ;
+    (28) args_list -> args_list . , expr
+    (29) args_list -> args_list . , STRING
 
     ;               shift and go to state 77
     ,               shift and go to state 78
@@ -1098,22 +1099,24 @@ state 35
 
 state 36
 
-    (30) print_list -> expr .
+    (30) args_list -> expr .
     (45) expr -> expr . + term
     (46) expr -> expr . - term
 
-    ;               reduce using rule 30 (print_list -> expr .)
-    ,               reduce using rule 30 (print_list -> expr .)
+    ;               reduce using rule 30 (args_list -> expr .)
+    ,               reduce using rule 30 (args_list -> expr .)
+    )               reduce using rule 30 (args_list -> expr .)
     +               shift and go to state 79
     -               shift and go to state 80
 
 
 state 37
 
-    (31) print_list -> STRING .
+    (31) args_list -> STRING .
 
-    ;               reduce using rule 31 (print_list -> STRING .)
-    ,               reduce using rule 31 (print_list -> STRING .)
+    ;               reduce using rule 31 (args_list -> STRING .)
+    ,               reduce using rule 31 (args_list -> STRING .)
+    )               reduce using rule 31 (args_list -> STRING .)
 
 
 state 38
@@ -1167,11 +1170,11 @@ state 40
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -1206,102 +1209,102 @@ state 41
 
 state 42
 
-    (69) elem -> ID .
+    (70) elem -> ID .
 
-    *               reduce using rule 69 (elem -> ID .)
-    /               reduce using rule 69 (elem -> ID .)
-    +               reduce using rule 69 (elem -> ID .)
-    -               reduce using rule 69 (elem -> ID .)
-    ;               reduce using rule 69 (elem -> ID .)
-    ,               reduce using rule 69 (elem -> ID .)
-    GREATEREQUAL    reduce using rule 69 (elem -> ID .)
-    EQUALS          reduce using rule 69 (elem -> ID .)
-    NOTEQUALS       reduce using rule 69 (elem -> ID .)
-    LOWEREQUAL      reduce using rule 69 (elem -> ID .)
-    <               reduce using rule 69 (elem -> ID .)
-    >               reduce using rule 69 (elem -> ID .)
-    )               reduce using rule 69 (elem -> ID .)
-    ]               reduce using rule 69 (elem -> ID .)
+    *               reduce using rule 70 (elem -> ID .)
+    /               reduce using rule 70 (elem -> ID .)
+    +               reduce using rule 70 (elem -> ID .)
+    -               reduce using rule 70 (elem -> ID .)
+    ;               reduce using rule 70 (elem -> ID .)
+    ,               reduce using rule 70 (elem -> ID .)
+    GREATEREQUAL    reduce using rule 70 (elem -> ID .)
+    EQUALS          reduce using rule 70 (elem -> ID .)
+    NOTEQUALS       reduce using rule 70 (elem -> ID .)
+    LOWEREQUAL      reduce using rule 70 (elem -> ID .)
+    <               reduce using rule 70 (elem -> ID .)
+    >               reduce using rule 70 (elem -> ID .)
+    )               reduce using rule 70 (elem -> ID .)
+    ]               reduce using rule 70 (elem -> ID .)
 
 
 state 43
 
-    (70) elem -> int .
+    (71) elem -> int .
 
-    *               reduce using rule 70 (elem -> int .)
-    /               reduce using rule 70 (elem -> int .)
-    +               reduce using rule 70 (elem -> int .)
-    -               reduce using rule 70 (elem -> int .)
-    ;               reduce using rule 70 (elem -> int .)
-    ,               reduce using rule 70 (elem -> int .)
-    GREATEREQUAL    reduce using rule 70 (elem -> int .)
-    EQUALS          reduce using rule 70 (elem -> int .)
-    NOTEQUALS       reduce using rule 70 (elem -> int .)
-    LOWEREQUAL      reduce using rule 70 (elem -> int .)
-    <               reduce using rule 70 (elem -> int .)
-    >               reduce using rule 70 (elem -> int .)
-    )               reduce using rule 70 (elem -> int .)
-    ]               reduce using rule 70 (elem -> int .)
+    *               reduce using rule 71 (elem -> int .)
+    /               reduce using rule 71 (elem -> int .)
+    +               reduce using rule 71 (elem -> int .)
+    -               reduce using rule 71 (elem -> int .)
+    ;               reduce using rule 71 (elem -> int .)
+    ,               reduce using rule 71 (elem -> int .)
+    GREATEREQUAL    reduce using rule 71 (elem -> int .)
+    EQUALS          reduce using rule 71 (elem -> int .)
+    NOTEQUALS       reduce using rule 71 (elem -> int .)
+    LOWEREQUAL      reduce using rule 71 (elem -> int .)
+    <               reduce using rule 71 (elem -> int .)
+    >               reduce using rule 71 (elem -> int .)
+    )               reduce using rule 71 (elem -> int .)
+    ]               reduce using rule 71 (elem -> int .)
 
 
 state 44
 
-    (71) elem -> float .
+    (72) elem -> float .
 
-    *               reduce using rule 71 (elem -> float .)
-    /               reduce using rule 71 (elem -> float .)
-    +               reduce using rule 71 (elem -> float .)
-    -               reduce using rule 71 (elem -> float .)
-    ;               reduce using rule 71 (elem -> float .)
-    ,               reduce using rule 71 (elem -> float .)
-    GREATEREQUAL    reduce using rule 71 (elem -> float .)
-    EQUALS          reduce using rule 71 (elem -> float .)
-    NOTEQUALS       reduce using rule 71 (elem -> float .)
-    LOWEREQUAL      reduce using rule 71 (elem -> float .)
-    <               reduce using rule 71 (elem -> float .)
-    >               reduce using rule 71 (elem -> float .)
-    )               reduce using rule 71 (elem -> float .)
-    ]               reduce using rule 71 (elem -> float .)
+    *               reduce using rule 72 (elem -> float .)
+    /               reduce using rule 72 (elem -> float .)
+    +               reduce using rule 72 (elem -> float .)
+    -               reduce using rule 72 (elem -> float .)
+    ;               reduce using rule 72 (elem -> float .)
+    ,               reduce using rule 72 (elem -> float .)
+    GREATEREQUAL    reduce using rule 72 (elem -> float .)
+    EQUALS          reduce using rule 72 (elem -> float .)
+    NOTEQUALS       reduce using rule 72 (elem -> float .)
+    LOWEREQUAL      reduce using rule 72 (elem -> float .)
+    <               reduce using rule 72 (elem -> float .)
+    >               reduce using rule 72 (elem -> float .)
+    )               reduce using rule 72 (elem -> float .)
+    ]               reduce using rule 72 (elem -> float .)
 
 
 state 45
 
-    (83) int -> INTNUM .
+    (84) int -> INTNUM .
 
-    *               reduce using rule 83 (int -> INTNUM .)
-    /               reduce using rule 83 (int -> INTNUM .)
-    +               reduce using rule 83 (int -> INTNUM .)
-    -               reduce using rule 83 (int -> INTNUM .)
-    ;               reduce using rule 83 (int -> INTNUM .)
-    ,               reduce using rule 83 (int -> INTNUM .)
-    GREATEREQUAL    reduce using rule 83 (int -> INTNUM .)
-    EQUALS          reduce using rule 83 (int -> INTNUM .)
-    NOTEQUALS       reduce using rule 83 (int -> INTNUM .)
-    LOWEREQUAL      reduce using rule 83 (int -> INTNUM .)
-    <               reduce using rule 83 (int -> INTNUM .)
-    >               reduce using rule 83 (int -> INTNUM .)
-    )               reduce using rule 83 (int -> INTNUM .)
-    ]               reduce using rule 83 (int -> INTNUM .)
+    *               reduce using rule 84 (int -> INTNUM .)
+    /               reduce using rule 84 (int -> INTNUM .)
+    +               reduce using rule 84 (int -> INTNUM .)
+    -               reduce using rule 84 (int -> INTNUM .)
+    ;               reduce using rule 84 (int -> INTNUM .)
+    ,               reduce using rule 84 (int -> INTNUM .)
+    GREATEREQUAL    reduce using rule 84 (int -> INTNUM .)
+    EQUALS          reduce using rule 84 (int -> INTNUM .)
+    NOTEQUALS       reduce using rule 84 (int -> INTNUM .)
+    LOWEREQUAL      reduce using rule 84 (int -> INTNUM .)
+    <               reduce using rule 84 (int -> INTNUM .)
+    >               reduce using rule 84 (int -> INTNUM .)
+    )               reduce using rule 84 (int -> INTNUM .)
+    ]               reduce using rule 84 (int -> INTNUM .)
 
 
 state 46
 
-    (84) float -> FLONUM .
+    (85) float -> FLONUM .
 
-    *               reduce using rule 84 (float -> FLONUM .)
-    /               reduce using rule 84 (float -> FLONUM .)
-    +               reduce using rule 84 (float -> FLONUM .)
-    -               reduce using rule 84 (float -> FLONUM .)
-    ;               reduce using rule 84 (float -> FLONUM .)
-    ,               reduce using rule 84 (float -> FLONUM .)
-    GREATEREQUAL    reduce using rule 84 (float -> FLONUM .)
-    EQUALS          reduce using rule 84 (float -> FLONUM .)
-    NOTEQUALS       reduce using rule 84 (float -> FLONUM .)
-    LOWEREQUAL      reduce using rule 84 (float -> FLONUM .)
-    <               reduce using rule 84 (float -> FLONUM .)
-    >               reduce using rule 84 (float -> FLONUM .)
-    )               reduce using rule 84 (float -> FLONUM .)
-    ]               reduce using rule 84 (float -> FLONUM .)
+    *               reduce using rule 85 (float -> FLONUM .)
+    /               reduce using rule 85 (float -> FLONUM .)
+    +               reduce using rule 85 (float -> FLONUM .)
+    -               reduce using rule 85 (float -> FLONUM .)
+    ;               reduce using rule 85 (float -> FLONUM .)
+    ,               reduce using rule 85 (float -> FLONUM .)
+    GREATEREQUAL    reduce using rule 85 (float -> FLONUM .)
+    EQUALS          reduce using rule 85 (float -> FLONUM .)
+    NOTEQUALS       reduce using rule 85 (float -> FLONUM .)
+    LOWEREQUAL      reduce using rule 85 (float -> FLONUM .)
+    <               reduce using rule 85 (float -> FLONUM .)
+    >               reduce using rule 85 (float -> FLONUM .)
+    )               reduce using rule 85 (float -> FLONUM .)
+    ]               reduce using rule 85 (float -> FLONUM .)
 
 
 state 47
@@ -1361,24 +1364,24 @@ state 50
 state 51
 
     (38) token -> ID .
-    (80) matrix_factor -> ID .
-    (69) elem -> ID .
+    (81) matrix_factor -> ID .
+    (70) elem -> ID .
 
   ! reduce/reduce conflict for ; resolved using rule 38 (token -> ID .)
   ! reduce/reduce conflict for ; resolved using rule 38 (token -> ID .)
     ;               reduce using rule 38 (token -> ID .)
-    DOTMUL          reduce using rule 80 (matrix_factor -> ID .)
-    DOTDIV          reduce using rule 80 (matrix_factor -> ID .)
-    DOTADD          reduce using rule 80 (matrix_factor -> ID .)
-    DOTSUB          reduce using rule 80 (matrix_factor -> ID .)
-    '               reduce using rule 80 (matrix_factor -> ID .)
-    *               reduce using rule 69 (elem -> ID .)
-    /               reduce using rule 69 (elem -> ID .)
-    +               reduce using rule 69 (elem -> ID .)
-    -               reduce using rule 69 (elem -> ID .)
+    DOTMUL          reduce using rule 81 (matrix_factor -> ID .)
+    DOTDIV          reduce using rule 81 (matrix_factor -> ID .)
+    DOTADD          reduce using rule 81 (matrix_factor -> ID .)
+    DOTSUB          reduce using rule 81 (matrix_factor -> ID .)
+    '               reduce using rule 81 (matrix_factor -> ID .)
+    *               reduce using rule 70 (elem -> ID .)
+    /               reduce using rule 70 (elem -> ID .)
+    +               reduce using rule 70 (elem -> ID .)
+    -               reduce using rule 70 (elem -> ID .)
 
-  ! ;               [ reduce using rule 80 (matrix_factor -> ID .) ]
-  ! ;               [ reduce using rule 69 (elem -> ID .) ]
+  ! ;               [ reduce using rule 81 (matrix_factor -> ID .) ]
+  ! ;               [ reduce using rule 70 (elem -> ID .) ]
 
 
 state 52
@@ -1391,47 +1394,47 @@ state 52
 state 53
 
     (39) token -> int .
-    (70) elem -> int .
+    (71) elem -> int .
 
   ! reduce/reduce conflict for ; resolved using rule 39 (token -> int .)
     ;               reduce using rule 39 (token -> int .)
-    *               reduce using rule 70 (elem -> int .)
-    /               reduce using rule 70 (elem -> int .)
-    +               reduce using rule 70 (elem -> int .)
-    -               reduce using rule 70 (elem -> int .)
+    *               reduce using rule 71 (elem -> int .)
+    /               reduce using rule 71 (elem -> int .)
+    +               reduce using rule 71 (elem -> int .)
+    -               reduce using rule 71 (elem -> int .)
 
-  ! ;               [ reduce using rule 70 (elem -> int .) ]
+  ! ;               [ reduce using rule 71 (elem -> int .) ]
 
 
 state 54
 
     (40) token -> float .
-    (71) elem -> float .
+    (72) elem -> float .
 
   ! reduce/reduce conflict for ; resolved using rule 40 (token -> float .)
     ;               reduce using rule 40 (token -> float .)
-    *               reduce using rule 71 (elem -> float .)
-    /               reduce using rule 71 (elem -> float .)
-    +               reduce using rule 71 (elem -> float .)
-    -               reduce using rule 71 (elem -> float .)
+    *               reduce using rule 72 (elem -> float .)
+    /               reduce using rule 72 (elem -> float .)
+    +               reduce using rule 72 (elem -> float .)
+    -               reduce using rule 72 (elem -> float .)
 
-  ! ;               [ reduce using rule 71 (elem -> float .) ]
+  ! ;               [ reduce using rule 72 (elem -> float .) ]
 
 
 state 55
 
     (41) token -> matrix .
-    (79) matrix_factor -> matrix .
+    (80) matrix_factor -> matrix .
 
   ! reduce/reduce conflict for ; resolved using rule 41 (token -> matrix .)
     ;               reduce using rule 41 (token -> matrix .)
-    DOTMUL          reduce using rule 79 (matrix_factor -> matrix .)
-    DOTDIV          reduce using rule 79 (matrix_factor -> matrix .)
-    DOTADD          reduce using rule 79 (matrix_factor -> matrix .)
-    DOTSUB          reduce using rule 79 (matrix_factor -> matrix .)
-    '               reduce using rule 79 (matrix_factor -> matrix .)
+    DOTMUL          reduce using rule 80 (matrix_factor -> matrix .)
+    DOTDIV          reduce using rule 80 (matrix_factor -> matrix .)
+    DOTADD          reduce using rule 80 (matrix_factor -> matrix .)
+    DOTSUB          reduce using rule 80 (matrix_factor -> matrix .)
+    '               reduce using rule 80 (matrix_factor -> matrix .)
 
-  ! ;               [ reduce using rule 79 (matrix_factor -> matrix .) ]
+  ! ;               [ reduce using rule 80 (matrix_factor -> matrix .) ]
 
 
 state 56
@@ -1448,9 +1451,9 @@ state 56
 state 57
 
     (43) token -> matrix_expr .
-    (72) matrix_expr -> matrix_expr . DOTADD matrix_term
-    (73) matrix_expr -> matrix_expr . DOTSUB matrix_term
-    (82) unary_expr -> matrix_expr . '
+    (73) matrix_expr -> matrix_expr . DOTADD matrix_term
+    (74) matrix_expr -> matrix_expr . DOTSUB matrix_term
+    (83) unary_expr -> matrix_expr . '
 
     ;               reduce using rule 43 (token -> matrix_expr .)
     DOTADD          shift and go to state 86
@@ -1472,12 +1475,16 @@ state 59
     (66) outerlist -> . innerlist
     (67) innerlist -> . innerlist , elem
     (68) innerlist -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (69) innerlist -> .
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
+    ,               reduce using rule 69 (innerlist -> .)
+    ]               reduce using rule 69 (innerlist -> .)
+    ;               reduce using rule 69 (innerlist -> .)
     ID              shift and go to state 42
     INTNUM          shift and go to state 45
     FLONUM          shift and go to state 46
@@ -1490,7 +1497,7 @@ state 59
 
 state 60
 
-    (61) matrix -> ONES . ( int )
+    (61) matrix -> ONES . ( args_list )
 
     (               shift and go to state 92
 
@@ -1498,33 +1505,33 @@ state 60
 state 61
 
     (51) factor -> ( . expr )
-    (78) matrix_factor -> ( . matrix_expr )
+    (79) matrix_factor -> ( . matrix_expr )
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
-    (72) matrix_expr -> . matrix_expr DOTADD matrix_term
-    (73) matrix_expr -> . matrix_expr DOTSUB matrix_term
-    (74) matrix_expr -> . matrix_term
+    (73) matrix_expr -> . matrix_expr DOTADD matrix_term
+    (74) matrix_expr -> . matrix_expr DOTSUB matrix_term
+    (75) matrix_expr -> . matrix_term
     (48) term -> . term * factor
     (49) term -> . term / factor
     (50) term -> . factor
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 61
     ID              shift and go to state 95
@@ -1548,21 +1555,21 @@ state 61
 
 state 62
 
-    (62) matrix -> ZEROS . ( int )
+    (62) matrix -> ZEROS . ( args_list )
 
     (               shift and go to state 96
 
 
 state 63
 
-    (63) matrix -> EYE . ( int )
+    (63) matrix -> EYE . ( args_list )
 
     (               shift and go to state 97
 
 
 state 64
 
-    (81) unary_expr -> - . expr
+    (82) unary_expr -> - . expr
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
@@ -1571,11 +1578,11 @@ state 64
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -1591,30 +1598,30 @@ state 64
 
 state 65
 
-    (74) matrix_expr -> matrix_term .
-    (75) matrix_term -> matrix_term . DOTMUL matrix_factor
-    (76) matrix_term -> matrix_term . DOTDIV matrix_factor
+    (75) matrix_expr -> matrix_term .
+    (76) matrix_term -> matrix_term . DOTMUL matrix_factor
+    (77) matrix_term -> matrix_term . DOTDIV matrix_factor
 
-    DOTADD          reduce using rule 74 (matrix_expr -> matrix_term .)
-    DOTSUB          reduce using rule 74 (matrix_expr -> matrix_term .)
-    '               reduce using rule 74 (matrix_expr -> matrix_term .)
-    ;               reduce using rule 74 (matrix_expr -> matrix_term .)
-    )               reduce using rule 74 (matrix_expr -> matrix_term .)
+    DOTADD          reduce using rule 75 (matrix_expr -> matrix_term .)
+    DOTSUB          reduce using rule 75 (matrix_expr -> matrix_term .)
+    '               reduce using rule 75 (matrix_expr -> matrix_term .)
+    ;               reduce using rule 75 (matrix_expr -> matrix_term .)
+    )               reduce using rule 75 (matrix_expr -> matrix_term .)
     DOTMUL          shift and go to state 99
     DOTDIV          shift and go to state 100
 
 
 state 66
 
-    (77) matrix_term -> matrix_factor .
+    (78) matrix_term -> matrix_factor .
 
-    DOTMUL          reduce using rule 77 (matrix_term -> matrix_factor .)
-    DOTDIV          reduce using rule 77 (matrix_term -> matrix_factor .)
-    DOTADD          reduce using rule 77 (matrix_term -> matrix_factor .)
-    DOTSUB          reduce using rule 77 (matrix_term -> matrix_factor .)
-    '               reduce using rule 77 (matrix_term -> matrix_factor .)
-    ;               reduce using rule 77 (matrix_term -> matrix_factor .)
-    )               reduce using rule 77 (matrix_term -> matrix_factor .)
+    DOTMUL          reduce using rule 78 (matrix_term -> matrix_factor .)
+    DOTDIV          reduce using rule 78 (matrix_term -> matrix_factor .)
+    DOTADD          reduce using rule 78 (matrix_term -> matrix_factor .)
+    DOTSUB          reduce using rule 78 (matrix_term -> matrix_factor .)
+    '               reduce using rule 78 (matrix_term -> matrix_factor .)
+    ;               reduce using rule 78 (matrix_term -> matrix_factor .)
+    )               reduce using rule 78 (matrix_term -> matrix_factor .)
 
 
 state 67
@@ -1711,26 +1718,26 @@ state 76
 
 state 77
 
-    (27) print_instruction -> PRINT print_list ; .
+    (27) print_instruction -> PRINT args_list ; .
 
-    ID              reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    IF              reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    FOR             reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    WHILE           reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    PRINT           reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    BREAK           reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    CONTINUE        reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    RETURN          reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    {               reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    $end            reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    }               reduce using rule 27 (print_instruction -> PRINT print_list ; .)
-    ELSE            reduce using rule 27 (print_instruction -> PRINT print_list ; .)
+    ID              reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    IF              reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    FOR             reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    WHILE           reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    PRINT           reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    BREAK           reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    CONTINUE        reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    RETURN          reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    {               reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    $end            reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    }               reduce using rule 27 (print_instruction -> PRINT args_list ; .)
+    ELSE            reduce using rule 27 (print_instruction -> PRINT args_list ; .)
 
 
 state 78
 
-    (28) print_list -> print_list , . expr
-    (29) print_list -> print_list , . STRING
+    (28) args_list -> args_list , . expr
+    (29) args_list -> args_list , . STRING
     (45) expr -> . expr + term
     (46) expr -> . expr - term
     (47) expr -> . term
@@ -1739,11 +1746,11 @@ state 78
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     STRING          shift and go to state 113
     (               shift and go to state 40
@@ -1766,11 +1773,11 @@ state 79
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -1791,11 +1798,11 @@ state 80
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -1813,11 +1820,11 @@ state 81
     (48) term -> term * . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -1834,11 +1841,11 @@ state 82
     (49) term -> term / . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -1899,17 +1906,17 @@ state 85
 
 state 86
 
-    (72) matrix_expr -> matrix_expr DOTADD . matrix_term
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
+    (73) matrix_expr -> matrix_expr DOTADD . matrix_term
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
 
     (               shift and go to state 120
     ID              shift and go to state 121
@@ -1924,17 +1931,17 @@ state 86
 
 state 87
 
-    (73) matrix_expr -> matrix_expr DOTSUB . matrix_term
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
+    (74) matrix_expr -> matrix_expr DOTSUB . matrix_term
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
 
     (               shift and go to state 120
     ID              shift and go to state 121
@@ -1949,9 +1956,9 @@ state 87
 
 state 88
 
-    (82) unary_expr -> matrix_expr ' .
+    (83) unary_expr -> matrix_expr ' .
 
-    ;               reduce using rule 82 (unary_expr -> matrix_expr ' .)
+    ;               reduce using rule 83 (unary_expr -> matrix_expr ' .)
 
 
 state 89
@@ -1984,18 +1991,44 @@ state 91
 
 state 92
 
-    (61) matrix -> ONES ( . int )
-    (83) int -> . INTNUM
+    (61) matrix -> ONES ( . args_list )
+    (28) args_list -> . args_list , expr
+    (29) args_list -> . args_list , STRING
+    (30) args_list -> . expr
+    (31) args_list -> . STRING
+    (45) expr -> . expr + term
+    (46) expr -> . expr - term
+    (47) expr -> . term
+    (48) term -> . term * factor
+    (49) term -> . term / factor
+    (50) term -> . factor
+    (51) factor -> . ( expr )
+    (52) factor -> . elem
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
+    STRING          shift and go to state 37
+    (               shift and go to state 40
+    ID              shift and go to state 42
     INTNUM          shift and go to state 45
+    FLONUM          shift and go to state 46
 
-    int                            shift and go to state 126
+    args_list                      shift and go to state 126
+    expr                           shift and go to state 36
+    term                           shift and go to state 38
+    factor                         shift and go to state 39
+    elem                           shift and go to state 41
+    int                            shift and go to state 43
+    float                          shift and go to state 44
 
 state 93
 
-    (78) matrix_factor -> ( matrix_expr . )
-    (72) matrix_expr -> matrix_expr . DOTADD matrix_term
-    (73) matrix_expr -> matrix_expr . DOTSUB matrix_term
+    (79) matrix_factor -> ( matrix_expr . )
+    (73) matrix_expr -> matrix_expr . DOTADD matrix_term
+    (74) matrix_expr -> matrix_expr . DOTSUB matrix_term
 
     )               shift and go to state 127
     DOTADD          shift and go to state 86
@@ -2004,75 +2037,127 @@ state 93
 
 state 94
 
-    (79) matrix_factor -> matrix .
+    (80) matrix_factor -> matrix .
 
-    DOTMUL          reduce using rule 79 (matrix_factor -> matrix .)
-    DOTDIV          reduce using rule 79 (matrix_factor -> matrix .)
-    )               reduce using rule 79 (matrix_factor -> matrix .)
-    DOTADD          reduce using rule 79 (matrix_factor -> matrix .)
-    DOTSUB          reduce using rule 79 (matrix_factor -> matrix .)
-    '               reduce using rule 79 (matrix_factor -> matrix .)
-    ;               reduce using rule 79 (matrix_factor -> matrix .)
+    DOTMUL          reduce using rule 80 (matrix_factor -> matrix .)
+    DOTDIV          reduce using rule 80 (matrix_factor -> matrix .)
+    )               reduce using rule 80 (matrix_factor -> matrix .)
+    DOTADD          reduce using rule 80 (matrix_factor -> matrix .)
+    DOTSUB          reduce using rule 80 (matrix_factor -> matrix .)
+    '               reduce using rule 80 (matrix_factor -> matrix .)
+    ;               reduce using rule 80 (matrix_factor -> matrix .)
 
 
 state 95
 
-    (80) matrix_factor -> ID .
-    (69) elem -> ID .
+    (81) matrix_factor -> ID .
+    (70) elem -> ID .
 
-  ! reduce/reduce conflict for ) resolved using rule 69 (elem -> ID .)
-    DOTMUL          reduce using rule 80 (matrix_factor -> ID .)
-    DOTDIV          reduce using rule 80 (matrix_factor -> ID .)
-    DOTADD          reduce using rule 80 (matrix_factor -> ID .)
-    DOTSUB          reduce using rule 80 (matrix_factor -> ID .)
-    *               reduce using rule 69 (elem -> ID .)
-    /               reduce using rule 69 (elem -> ID .)
-    )               reduce using rule 69 (elem -> ID .)
-    +               reduce using rule 69 (elem -> ID .)
-    -               reduce using rule 69 (elem -> ID .)
+  ! reduce/reduce conflict for ) resolved using rule 70 (elem -> ID .)
+    DOTMUL          reduce using rule 81 (matrix_factor -> ID .)
+    DOTDIV          reduce using rule 81 (matrix_factor -> ID .)
+    DOTADD          reduce using rule 81 (matrix_factor -> ID .)
+    DOTSUB          reduce using rule 81 (matrix_factor -> ID .)
+    *               reduce using rule 70 (elem -> ID .)
+    /               reduce using rule 70 (elem -> ID .)
+    )               reduce using rule 70 (elem -> ID .)
+    +               reduce using rule 70 (elem -> ID .)
+    -               reduce using rule 70 (elem -> ID .)
 
-  ! )               [ reduce using rule 80 (matrix_factor -> ID .) ]
+  ! )               [ reduce using rule 81 (matrix_factor -> ID .) ]
 
 
 state 96
 
-    (62) matrix -> ZEROS ( . int )
-    (83) int -> . INTNUM
+    (62) matrix -> ZEROS ( . args_list )
+    (28) args_list -> . args_list , expr
+    (29) args_list -> . args_list , STRING
+    (30) args_list -> . expr
+    (31) args_list -> . STRING
+    (45) expr -> . expr + term
+    (46) expr -> . expr - term
+    (47) expr -> . term
+    (48) term -> . term * factor
+    (49) term -> . term / factor
+    (50) term -> . factor
+    (51) factor -> . ( expr )
+    (52) factor -> . elem
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
+    STRING          shift and go to state 37
+    (               shift and go to state 40
+    ID              shift and go to state 42
     INTNUM          shift and go to state 45
+    FLONUM          shift and go to state 46
 
-    int                            shift and go to state 128
+    args_list                      shift and go to state 128
+    expr                           shift and go to state 36
+    term                           shift and go to state 38
+    factor                         shift and go to state 39
+    elem                           shift and go to state 41
+    int                            shift and go to state 43
+    float                          shift and go to state 44
 
 state 97
 
-    (63) matrix -> EYE ( . int )
-    (83) int -> . INTNUM
+    (63) matrix -> EYE ( . args_list )
+    (28) args_list -> . args_list , expr
+    (29) args_list -> . args_list , STRING
+    (30) args_list -> . expr
+    (31) args_list -> . STRING
+    (45) expr -> . expr + term
+    (46) expr -> . expr - term
+    (47) expr -> . term
+    (48) term -> . term * factor
+    (49) term -> . term / factor
+    (50) term -> . factor
+    (51) factor -> . ( expr )
+    (52) factor -> . elem
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
+    STRING          shift and go to state 37
+    (               shift and go to state 40
+    ID              shift and go to state 42
     INTNUM          shift and go to state 45
+    FLONUM          shift and go to state 46
 
-    int                            shift and go to state 129
+    args_list                      shift and go to state 129
+    expr                           shift and go to state 36
+    term                           shift and go to state 38
+    factor                         shift and go to state 39
+    elem                           shift and go to state 41
+    int                            shift and go to state 43
+    float                          shift and go to state 44
 
 state 98
 
-    (81) unary_expr -> - expr .
+    (82) unary_expr -> - expr .
     (45) expr -> expr . + term
     (46) expr -> expr . - term
 
-    ;               reduce using rule 81 (unary_expr -> - expr .)
+    ;               reduce using rule 82 (unary_expr -> - expr .)
     +               shift and go to state 79
     -               shift and go to state 80
 
 
 state 99
 
-    (75) matrix_term -> matrix_term DOTMUL . matrix_factor
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
+    (76) matrix_term -> matrix_term DOTMUL . matrix_factor
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
 
     (               shift and go to state 120
     ID              shift and go to state 121
@@ -2086,14 +2171,14 @@ state 99
 
 state 100
 
-    (76) matrix_term -> matrix_term DOTDIV . matrix_factor
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
+    (77) matrix_term -> matrix_term DOTDIV . matrix_factor
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
 
     (               shift and go to state 120
     ID              shift and go to state 121
@@ -2143,7 +2228,7 @@ state 102
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;
@@ -2181,11 +2266,11 @@ state 103
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -2210,11 +2295,11 @@ state 104
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -2239,11 +2324,11 @@ state 105
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -2268,11 +2353,11 @@ state 106
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -2297,11 +2382,11 @@ state 107
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -2326,11 +2411,11 @@ state 108
     (50) term -> . factor
     (51) factor -> . ( expr )
     (52) factor -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     (               shift and go to state 40
     ID              shift and go to state 42
@@ -2389,7 +2474,7 @@ state 111
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;
@@ -2418,22 +2503,24 @@ state 111
 
 state 112
 
-    (28) print_list -> print_list , expr .
+    (28) args_list -> args_list , expr .
     (45) expr -> expr . + term
     (46) expr -> expr . - term
 
-    ;               reduce using rule 28 (print_list -> print_list , expr .)
-    ,               reduce using rule 28 (print_list -> print_list , expr .)
+    ;               reduce using rule 28 (args_list -> args_list , expr .)
+    ,               reduce using rule 28 (args_list -> args_list , expr .)
+    )               reduce using rule 28 (args_list -> args_list , expr .)
     +               shift and go to state 79
     -               shift and go to state 80
 
 
 state 113
 
-    (29) print_list -> print_list , STRING .
+    (29) args_list -> args_list , STRING .
 
-    ;               reduce using rule 29 (print_list -> print_list , STRING .)
-    ,               reduce using rule 29 (print_list -> print_list , STRING .)
+    ;               reduce using rule 29 (args_list -> args_list , STRING .)
+    ,               reduce using rule 29 (args_list -> args_list , STRING .)
+    )               reduce using rule 29 (args_list -> args_list , STRING .)
 
 
 state 114
@@ -2537,35 +2624,35 @@ state 118
 
 state 119
 
-    (72) matrix_expr -> matrix_expr DOTADD matrix_term .
-    (75) matrix_term -> matrix_term . DOTMUL matrix_factor
-    (76) matrix_term -> matrix_term . DOTDIV matrix_factor
+    (73) matrix_expr -> matrix_expr DOTADD matrix_term .
+    (76) matrix_term -> matrix_term . DOTMUL matrix_factor
+    (77) matrix_term -> matrix_term . DOTDIV matrix_factor
 
-    DOTADD          reduce using rule 72 (matrix_expr -> matrix_expr DOTADD matrix_term .)
-    DOTSUB          reduce using rule 72 (matrix_expr -> matrix_expr DOTADD matrix_term .)
-    '               reduce using rule 72 (matrix_expr -> matrix_expr DOTADD matrix_term .)
-    ;               reduce using rule 72 (matrix_expr -> matrix_expr DOTADD matrix_term .)
-    )               reduce using rule 72 (matrix_expr -> matrix_expr DOTADD matrix_term .)
+    DOTADD          reduce using rule 73 (matrix_expr -> matrix_expr DOTADD matrix_term .)
+    DOTSUB          reduce using rule 73 (matrix_expr -> matrix_expr DOTADD matrix_term .)
+    '               reduce using rule 73 (matrix_expr -> matrix_expr DOTADD matrix_term .)
+    ;               reduce using rule 73 (matrix_expr -> matrix_expr DOTADD matrix_term .)
+    )               reduce using rule 73 (matrix_expr -> matrix_expr DOTADD matrix_term .)
     DOTMUL          shift and go to state 99
     DOTDIV          shift and go to state 100
 
 
 state 120
 
-    (78) matrix_factor -> ( . matrix_expr )
-    (72) matrix_expr -> . matrix_expr DOTADD matrix_term
-    (73) matrix_expr -> . matrix_expr DOTSUB matrix_term
-    (74) matrix_expr -> . matrix_term
-    (75) matrix_term -> . matrix_term DOTMUL matrix_factor
-    (76) matrix_term -> . matrix_term DOTDIV matrix_factor
-    (77) matrix_term -> . matrix_factor
-    (78) matrix_factor -> . ( matrix_expr )
-    (79) matrix_factor -> . matrix
-    (80) matrix_factor -> . ID
+    (79) matrix_factor -> ( . matrix_expr )
+    (73) matrix_expr -> . matrix_expr DOTADD matrix_term
+    (74) matrix_expr -> . matrix_expr DOTSUB matrix_term
+    (75) matrix_expr -> . matrix_term
+    (76) matrix_term -> . matrix_term DOTMUL matrix_factor
+    (77) matrix_term -> . matrix_term DOTDIV matrix_factor
+    (78) matrix_term -> . matrix_factor
+    (79) matrix_factor -> . ( matrix_expr )
+    (80) matrix_factor -> . matrix
+    (81) matrix_factor -> . ID
     (60) matrix -> . [ outerlist ]
-    (61) matrix -> . ONES ( int )
-    (62) matrix -> . ZEROS ( int )
-    (63) matrix -> . EYE ( int )
+    (61) matrix -> . ONES ( args_list )
+    (62) matrix -> . ZEROS ( args_list )
+    (63) matrix -> . EYE ( args_list )
 
     (               shift and go to state 120
     ID              shift and go to state 121
@@ -2581,28 +2668,28 @@ state 120
 
 state 121
 
-    (80) matrix_factor -> ID .
+    (81) matrix_factor -> ID .
 
-    DOTMUL          reduce using rule 80 (matrix_factor -> ID .)
-    DOTDIV          reduce using rule 80 (matrix_factor -> ID .)
-    DOTADD          reduce using rule 80 (matrix_factor -> ID .)
-    DOTSUB          reduce using rule 80 (matrix_factor -> ID .)
-    '               reduce using rule 80 (matrix_factor -> ID .)
-    ;               reduce using rule 80 (matrix_factor -> ID .)
-    )               reduce using rule 80 (matrix_factor -> ID .)
+    DOTMUL          reduce using rule 81 (matrix_factor -> ID .)
+    DOTDIV          reduce using rule 81 (matrix_factor -> ID .)
+    DOTADD          reduce using rule 81 (matrix_factor -> ID .)
+    DOTSUB          reduce using rule 81 (matrix_factor -> ID .)
+    '               reduce using rule 81 (matrix_factor -> ID .)
+    ;               reduce using rule 81 (matrix_factor -> ID .)
+    )               reduce using rule 81 (matrix_factor -> ID .)
 
 
 state 122
 
-    (73) matrix_expr -> matrix_expr DOTSUB matrix_term .
-    (75) matrix_term -> matrix_term . DOTMUL matrix_factor
-    (76) matrix_term -> matrix_term . DOTDIV matrix_factor
+    (74) matrix_expr -> matrix_expr DOTSUB matrix_term .
+    (76) matrix_term -> matrix_term . DOTMUL matrix_factor
+    (77) matrix_term -> matrix_term . DOTDIV matrix_factor
 
-    DOTADD          reduce using rule 73 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
-    DOTSUB          reduce using rule 73 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
-    '               reduce using rule 73 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
-    ;               reduce using rule 73 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
-    )               reduce using rule 73 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
+    DOTADD          reduce using rule 74 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
+    DOTSUB          reduce using rule 74 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
+    '               reduce using rule 74 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
+    ;               reduce using rule 74 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
+    )               reduce using rule 74 (matrix_expr -> matrix_expr DOTSUB matrix_term .)
     DOTMUL          shift and go to state 99
     DOTDIV          shift and go to state 100
 
@@ -2625,12 +2712,16 @@ state 124
     (65) outerlist -> outerlist ; . innerlist
     (67) innerlist -> . innerlist , elem
     (68) innerlist -> . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (69) innerlist -> .
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
+    ,               reduce using rule 69 (innerlist -> .)
+    ]               reduce using rule 69 (innerlist -> .)
+    ;               reduce using rule 69 (innerlist -> .)
     ID              shift and go to state 42
     INTNUM          shift and go to state 45
     FLONUM          shift and go to state 46
@@ -2643,11 +2734,11 @@ state 124
 state 125
 
     (67) innerlist -> innerlist , . elem
-    (69) elem -> . ID
-    (70) elem -> . int
-    (71) elem -> . float
-    (83) int -> . INTNUM
-    (84) float -> . FLONUM
+    (70) elem -> . ID
+    (71) elem -> . int
+    (72) elem -> . float
+    (84) int -> . INTNUM
+    (85) float -> . FLONUM
 
     ID              shift and go to state 42
     INTNUM          shift and go to state 45
@@ -2659,62 +2750,71 @@ state 125
 
 state 126
 
-    (61) matrix -> ONES ( int . )
+    (61) matrix -> ONES ( args_list . )
+    (28) args_list -> args_list . , expr
+    (29) args_list -> args_list . , STRING
 
     )               shift and go to state 147
+    ,               shift and go to state 78
 
 
 state 127
 
-    (78) matrix_factor -> ( matrix_expr ) .
+    (79) matrix_factor -> ( matrix_expr ) .
 
-    DOTMUL          reduce using rule 78 (matrix_factor -> ( matrix_expr ) .)
-    DOTDIV          reduce using rule 78 (matrix_factor -> ( matrix_expr ) .)
-    DOTADD          reduce using rule 78 (matrix_factor -> ( matrix_expr ) .)
-    DOTSUB          reduce using rule 78 (matrix_factor -> ( matrix_expr ) .)
-    '               reduce using rule 78 (matrix_factor -> ( matrix_expr ) .)
-    ;               reduce using rule 78 (matrix_factor -> ( matrix_expr ) .)
-    )               reduce using rule 78 (matrix_factor -> ( matrix_expr ) .)
+    DOTMUL          reduce using rule 79 (matrix_factor -> ( matrix_expr ) .)
+    DOTDIV          reduce using rule 79 (matrix_factor -> ( matrix_expr ) .)
+    DOTADD          reduce using rule 79 (matrix_factor -> ( matrix_expr ) .)
+    DOTSUB          reduce using rule 79 (matrix_factor -> ( matrix_expr ) .)
+    '               reduce using rule 79 (matrix_factor -> ( matrix_expr ) .)
+    ;               reduce using rule 79 (matrix_factor -> ( matrix_expr ) .)
+    )               reduce using rule 79 (matrix_factor -> ( matrix_expr ) .)
 
 
 state 128
 
-    (62) matrix -> ZEROS ( int . )
+    (62) matrix -> ZEROS ( args_list . )
+    (28) args_list -> args_list . , expr
+    (29) args_list -> args_list . , STRING
 
     )               shift and go to state 148
+    ,               shift and go to state 78
 
 
 state 129
 
-    (63) matrix -> EYE ( int . )
+    (63) matrix -> EYE ( args_list . )
+    (28) args_list -> args_list . , expr
+    (29) args_list -> args_list . , STRING
 
     )               shift and go to state 149
+    ,               shift and go to state 78
 
 
 state 130
 
-    (75) matrix_term -> matrix_term DOTMUL matrix_factor .
+    (76) matrix_term -> matrix_term DOTMUL matrix_factor .
 
-    DOTMUL          reduce using rule 75 (matrix_term -> matrix_term DOTMUL matrix_factor .)
-    DOTDIV          reduce using rule 75 (matrix_term -> matrix_term DOTMUL matrix_factor .)
-    DOTADD          reduce using rule 75 (matrix_term -> matrix_term DOTMUL matrix_factor .)
-    DOTSUB          reduce using rule 75 (matrix_term -> matrix_term DOTMUL matrix_factor .)
-    '               reduce using rule 75 (matrix_term -> matrix_term DOTMUL matrix_factor .)
-    ;               reduce using rule 75 (matrix_term -> matrix_term DOTMUL matrix_factor .)
-    )               reduce using rule 75 (matrix_term -> matrix_term DOTMUL matrix_factor .)
+    DOTMUL          reduce using rule 76 (matrix_term -> matrix_term DOTMUL matrix_factor .)
+    DOTDIV          reduce using rule 76 (matrix_term -> matrix_term DOTMUL matrix_factor .)
+    DOTADD          reduce using rule 76 (matrix_term -> matrix_term DOTMUL matrix_factor .)
+    DOTSUB          reduce using rule 76 (matrix_term -> matrix_term DOTMUL matrix_factor .)
+    '               reduce using rule 76 (matrix_term -> matrix_term DOTMUL matrix_factor .)
+    ;               reduce using rule 76 (matrix_term -> matrix_term DOTMUL matrix_factor .)
+    )               reduce using rule 76 (matrix_term -> matrix_term DOTMUL matrix_factor .)
 
 
 state 131
 
-    (76) matrix_term -> matrix_term DOTDIV matrix_factor .
+    (77) matrix_term -> matrix_term DOTDIV matrix_factor .
 
-    DOTMUL          reduce using rule 76 (matrix_term -> matrix_term DOTDIV matrix_factor .)
-    DOTDIV          reduce using rule 76 (matrix_term -> matrix_term DOTDIV matrix_factor .)
-    DOTADD          reduce using rule 76 (matrix_term -> matrix_term DOTDIV matrix_factor .)
-    DOTSUB          reduce using rule 76 (matrix_term -> matrix_term DOTDIV matrix_factor .)
-    '               reduce using rule 76 (matrix_term -> matrix_term DOTDIV matrix_factor .)
-    ;               reduce using rule 76 (matrix_term -> matrix_term DOTDIV matrix_factor .)
-    )               reduce using rule 76 (matrix_term -> matrix_term DOTDIV matrix_factor .)
+    DOTMUL          reduce using rule 77 (matrix_term -> matrix_term DOTDIV matrix_factor .)
+    DOTDIV          reduce using rule 77 (matrix_term -> matrix_term DOTDIV matrix_factor .)
+    DOTADD          reduce using rule 77 (matrix_term -> matrix_term DOTDIV matrix_factor .)
+    DOTSUB          reduce using rule 77 (matrix_term -> matrix_term DOTDIV matrix_factor .)
+    '               reduce using rule 77 (matrix_term -> matrix_term DOTDIV matrix_factor .)
+    ;               reduce using rule 77 (matrix_term -> matrix_term DOTDIV matrix_factor .)
+    )               reduce using rule 77 (matrix_term -> matrix_term DOTDIV matrix_factor .)
 
 
 state 132
@@ -2958,41 +3058,41 @@ state 146
 
 state 147
 
-    (61) matrix -> ONES ( int ) .
+    (61) matrix -> ONES ( args_list ) .
 
-    ;               reduce using rule 61 (matrix -> ONES ( int ) .)
-    DOTMUL          reduce using rule 61 (matrix -> ONES ( int ) .)
-    DOTDIV          reduce using rule 61 (matrix -> ONES ( int ) .)
-    DOTADD          reduce using rule 61 (matrix -> ONES ( int ) .)
-    DOTSUB          reduce using rule 61 (matrix -> ONES ( int ) .)
-    '               reduce using rule 61 (matrix -> ONES ( int ) .)
-    )               reduce using rule 61 (matrix -> ONES ( int ) .)
+    ;               reduce using rule 61 (matrix -> ONES ( args_list ) .)
+    DOTMUL          reduce using rule 61 (matrix -> ONES ( args_list ) .)
+    DOTDIV          reduce using rule 61 (matrix -> ONES ( args_list ) .)
+    DOTADD          reduce using rule 61 (matrix -> ONES ( args_list ) .)
+    DOTSUB          reduce using rule 61 (matrix -> ONES ( args_list ) .)
+    '               reduce using rule 61 (matrix -> ONES ( args_list ) .)
+    )               reduce using rule 61 (matrix -> ONES ( args_list ) .)
 
 
 state 148
 
-    (62) matrix -> ZEROS ( int ) .
+    (62) matrix -> ZEROS ( args_list ) .
 
-    ;               reduce using rule 62 (matrix -> ZEROS ( int ) .)
-    DOTMUL          reduce using rule 62 (matrix -> ZEROS ( int ) .)
-    DOTDIV          reduce using rule 62 (matrix -> ZEROS ( int ) .)
-    DOTADD          reduce using rule 62 (matrix -> ZEROS ( int ) .)
-    DOTSUB          reduce using rule 62 (matrix -> ZEROS ( int ) .)
-    '               reduce using rule 62 (matrix -> ZEROS ( int ) .)
-    )               reduce using rule 62 (matrix -> ZEROS ( int ) .)
+    ;               reduce using rule 62 (matrix -> ZEROS ( args_list ) .)
+    DOTMUL          reduce using rule 62 (matrix -> ZEROS ( args_list ) .)
+    DOTDIV          reduce using rule 62 (matrix -> ZEROS ( args_list ) .)
+    DOTADD          reduce using rule 62 (matrix -> ZEROS ( args_list ) .)
+    DOTSUB          reduce using rule 62 (matrix -> ZEROS ( args_list ) .)
+    '               reduce using rule 62 (matrix -> ZEROS ( args_list ) .)
+    )               reduce using rule 62 (matrix -> ZEROS ( args_list ) .)
 
 
 state 149
 
-    (63) matrix -> EYE ( int ) .
+    (63) matrix -> EYE ( args_list ) .
 
-    ;               reduce using rule 63 (matrix -> EYE ( int ) .)
-    DOTMUL          reduce using rule 63 (matrix -> EYE ( int ) .)
-    DOTDIV          reduce using rule 63 (matrix -> EYE ( int ) .)
-    DOTADD          reduce using rule 63 (matrix -> EYE ( int ) .)
-    DOTSUB          reduce using rule 63 (matrix -> EYE ( int ) .)
-    '               reduce using rule 63 (matrix -> EYE ( int ) .)
-    )               reduce using rule 63 (matrix -> EYE ( int ) .)
+    ;               reduce using rule 63 (matrix -> EYE ( args_list ) .)
+    DOTMUL          reduce using rule 63 (matrix -> EYE ( args_list ) .)
+    DOTDIV          reduce using rule 63 (matrix -> EYE ( args_list ) .)
+    DOTADD          reduce using rule 63 (matrix -> EYE ( args_list ) .)
+    DOTSUB          reduce using rule 63 (matrix -> EYE ( args_list ) .)
+    '               reduce using rule 63 (matrix -> EYE ( args_list ) .)
+    )               reduce using rule 63 (matrix -> EYE ( args_list ) .)
 
 
 state 150
@@ -3029,7 +3129,7 @@ state 151
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;
@@ -3084,7 +3184,7 @@ state 152
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;
@@ -3141,7 +3241,7 @@ state 153
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;
@@ -3197,7 +3297,7 @@ state 154
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
     (23) while_instruction -> . WHILE ( relational_expr ) instruction
-    (27) print_instruction -> . PRINT print_list ;
+    (27) print_instruction -> . PRINT args_list ;
     (24) loop_instruction -> . BREAK ;
     (25) loop_instruction -> . CONTINUE ;
     (26) return_instruction -> . RETURN expr ;

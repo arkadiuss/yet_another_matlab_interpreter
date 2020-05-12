@@ -6,7 +6,6 @@ class NodeVisitor(object):
 
     def visit(self, node):
         method = 'visit_' + node.__class__.__name__
-        print(node)
         visitor = getattr(self, method, self.generic_visit)
         return visitor(node)
 
@@ -16,7 +15,6 @@ class NodeVisitor(object):
             for elem in node:
                 self.visit(elem)
         else:
-            print(node)
             for child in node.children:
                 if isinstance(child, list):
                     for item in child:
@@ -59,6 +57,9 @@ class TypeChecker(NodeVisitor):
                     'int': 'float',
                     'float': 'float'
                 }
+            },
+            '=': {
+                
             }
         }
 
@@ -84,26 +85,28 @@ class TypeChecker(NodeVisitor):
         pass 
 
     def visit_BinExpr(self, node):
-                                          # alternative usage,
-                                          # requires definition of accept method in class Node
-        type1 = self.visit(node.left)     # type1 = node.left.accept(self) 
-        type2 = self.visit(node.right)    # type2 = node.right.accept(self)
+        type1 = self.visit(node.left)    
+        type2 = self.visit(node.right) 
         op    = node.op
+        # todo consider seperation between assignment and binary expression
+        if op == '=':
+            return type2
+        print(op, type1, type2)
         return self.types[op][type1][type2]
 
     def visit_Outerlist(self, node):
-        if(self.outerlist):
+        if node.outerlist:
             mtype = self.visit(node.outerlist)
             ctype = self.visit(node.innerlist)
-            if ctype.size != mtype.c_size:
+            if ctype.size != mtype.size_c:
                 print('Incompatibile dimensions')
             return MatrixSymbol(mtype.name, mtype.size_r+1, mtype.size_c)
         ctype = self.visit(node.innerlist)
         return MatrixSymbol('an', 1, ctype.size)
 
     def visit_Innerlist(self, node):
-        if(self.innelist):
-            list_type = self.visit(self.innerlist)
+        if node.innerlist:
+            list_type = self.visit(node.innerlist)
             return VectorSymbol(list_type.name, list_type.size + 1)
         return VectorSymbol("an", 1)
 
@@ -111,13 +114,21 @@ class TypeChecker(NodeVisitor):
         return self.visit(node.innerlist)
 
     def visit_Matrix(self, node):
-        return self.visit(node.outerlist)
+        print(node.matrix)
+        return self.visit(node.matrix)
 
     def visit_Assignment(self, node):
         pass
 
     def visit_Variable(self, node):
-        return VariableSymbol()
+        pass
         
+    def visit_Token(self, node):
+        return self.visit(node.token)
 
+    def visit_IntNum(self, node):
+        return 'int'
+
+    def visit_FloatNum(self, node):
+        return 'float'
 

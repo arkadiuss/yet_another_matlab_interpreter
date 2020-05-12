@@ -83,18 +83,18 @@ def p_return_instruction(p):
     p[0] = ReturnInstruction(p[2])
 
 def p_print_instruction(p):
-    """print_instruction : PRINT print_list ';'"""
+    """print_instruction : PRINT args_list ';'"""
     p[0] = PrintInstruction(p[2])
 
-def p_print_list_1(p):
-    """print_list : print_list ',' expr
-                  | print_list ',' STRING"""
-    p[0] = PrintList(p[1], p[3])
+def p_args_list_1(p):
+    """args_list : args_list ',' expr
+                  | args_list ',' STRING"""
+    p[0] = ArgsList(p[1], p[3])
 
-def p_print_list_2(p):
-    """print_list : expr
+def p_args_list_2(p):
+    """args_list : expr
                   | STRING"""
-    p[0] = PrintList(None, p[1])
+    p[0] = ArgsList(None, p[1])
 
 def p_assignment_1(p):
     """assignment : ID '=' token
@@ -205,19 +205,22 @@ def p_MID(p):
     p[0] = Mid(p[1], p[3], p[5])
 
 def p_matrix_1(p):
+    # for working opers.m
     """matrix : '[' outerlist ']' """
-    p[0]=Matrix(p[1])
+    # for working init.m
+    #"""matrix : '[' outerlist ';' ']' """
+    p[0]=Matrix(p[2])
 
 def p_matrix_2(p):
-    """matrix : ONES '(' int ')'"""
+    """matrix : ONES '(' args_list ')'"""
     p[0]=Matrix(Ones(p[3]))
     
 def p_matrix_3(p):
-    """matrix : ZEROS '(' int ')'"""
+    """matrix : ZEROS '(' args_list ')'"""
     p[0]=Matrix(Zeros(p[3]))
 
 def p_matrix_4(p):
-    """matrix : EYE '(' int ')'"""
+    """matrix : EYE '(' args_list ')'"""
     p[0]=Matrix(Eye(p[3]))
 
 def p_vector(p):
@@ -239,6 +242,10 @@ def p_innerlist_1(p):
 def p_innerlist_2(p):
     """innerlist : elem"""
     p[0] = Innerlist(None, p[1])
+
+def p_innerlist_3(p):
+    """innerlist : """
+    p[0] = Innerlist(None, None)
 
 def p_elem_id(p):
     """elem : ID"""
