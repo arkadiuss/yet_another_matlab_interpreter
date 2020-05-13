@@ -23,6 +23,11 @@ class BinExpr(Node):
         self.left = left
         self.right = right
 
+class Assignment(Node):
+    def __init__(self, op, left, right):
+        self.op = op
+        self.left = left
+        self.right = right
 
 class Program(Node):
     def __init__(self, instructions_opt):

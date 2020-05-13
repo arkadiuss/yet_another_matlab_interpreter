@@ -34,7 +34,14 @@ class TreePrinter:
         res += self.left.printTree(indent + 1)
         res += self.right.printTree(indent + 1)
         return res
-
+    
+    @addToClass(AST.Assignment)
+    def printTree(self, indent=0):
+        res = get_indent(indent) + self.op + "\n"
+        res += self.left.printTree(indent + 1)
+        res += self.right.printTree(indent + 1)
+        return res
+    
     @addToClass(AST.Program)
     def printTree(self, indent=0):
         return self.instructions_opt.printTree()

@@ -7,19 +7,25 @@ class VariableSymbol:
         self.name = name
         self.type = type
 
+    def __str__(self):
+        return "{0} of type {1}".format(self.name, self.type)
 
 class VectorSymbol:
 
-    def __init__(self, name, size):
-        self.name = name
+    def __init__(self, size):
         self.size = size
+
+    def __str__(self):
+        return "vector of size {0}".format(self.size)
 
 class MatrixSymbol:
 
-    def __init__(self, name, size_r, size_c):
-        self.name = name
+    def __init__(self, size_r, size_c):
         self.size_r = size_r
         self.size_c = size_c
+
+    def __str__(self):
+        return "matrix {0}x{1}".format(self.size_r, self.size_c)
 
 class SymbolTable(object):
 

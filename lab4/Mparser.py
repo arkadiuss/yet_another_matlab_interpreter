@@ -116,12 +116,12 @@ def p_assignment_1(p):
     elif p[2] == '/=':    
         if p[1] in variables and variables[p[1]] != None:
             variables[p[1]] = variables[p[1]] / p[3]
-    p[0] = BinExpr(p[2], Variable(p[1]), p[3])
+    p[0] = Assignment(p[2], Variable(p[1]), p[3])
 
 def p_assignment_2(p):
     """assignment : MID '=' elem"""
     variables[p[1]] = p[3]
-    p[0] = BinExpr(p[2], p[1], p[3])
+    p[0] = Assignment(p[2], p[1], p[3])
 
 def p_token_id(p):
     """token : ID"""
