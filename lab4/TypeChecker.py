@@ -82,13 +82,13 @@ class TypeChecker(NodeVisitor):
     def visit_LoopInstruction(self, node):
         # todo it's not so simple
         if self.scope.name != 'Loop':
-            print("Break or coninue outer the Loop scope")
+            print("[{}] Break or coninue outer the Loop scope".format(node.lineno))
         pass
 
     def visit_ReturnInstruction(self, node):
         # todo it's not so simple
         if self.scope.name != 'Function':
-            print("Return used outside the function scope")
+            print("[{}] Return used outside the function scope".format(node.lineno))
         pass 
     
     def visit_PrintInstruction(self, node):
@@ -110,15 +110,16 @@ class TypeChecker(NodeVisitor):
             if op in ['+', '-'] and type1.size_r == type2.size_r and type1.size_c == type2.size_c:
                 return MatrixSymbol(type1.size_r, type2.size_c)
         
-        print("Incompatibile types: {0} and {1}".format(type1, type2))
+        print("[{0}] Incompatibile types: {1} and {2}".format(node.lineno, type1, type2))
 
 
     def visit_Outerlist(self, node):
         if node.outerlist:
             mtype = self.visit(node.outerlist)
             ctype = self.visit(node.innerlist)
+            # print(node.lineno)
             if ctype.size != mtype.size_c:
-                print('Incompatibile dimensions')
+                print('[{}] Incompatibile dimensions'.format(node.lineno))
             return MatrixSymbol(mtype.size_r+1, mtype.size_c)
         ctype = self.visit(node.innerlist)
         return MatrixSymbol(1, ctype.size)
@@ -139,7 +140,7 @@ class TypeChecker(NodeVisitor):
     def visit_Zeros(self, node):
         atype = self.visit(node.n)
         if len(atype) == 0 or len(atype) > 1 or atype[0] != 'int':
-            print("Zeros accepts exactly one argument of type int")
+            print("[{}] Zeros accepts exactly one argument of type int".format(node.lineno))
             return None
         n = node.n.arg.token.value
         return MatrixSymbol(n,n)
@@ -147,7 +148,7 @@ class TypeChecker(NodeVisitor):
     def visit_Ones(self, node):
         atype = self.visit(node.n)
         if len(atype) == 0 or len(atype) > 1 or atype[0] != 'int':
-            print("Ones accepts exactly one argument of type int")
+            print("[{}] Ones accepts exactly one argument of type int".format(node.lineno))
             return None
         n = node.n.arg.token.value
         return MatrixSymbol(n,n)
@@ -156,7 +157,7 @@ class TypeChecker(NodeVisitor):
     def visit_Eye(self, node):
         atype = self.visit(node.n)
         if len(atype) == 0 or len(atype) > 1 or atype[0] != 'int':
-            print("Eye accepts exactly one argument of type int")
+            print("[{}] Eye accepts exactly one argument of type int".format(node.lineno))
             return None
         n = node.n.arg.token.value
         return MatrixSymbol(n,n)
