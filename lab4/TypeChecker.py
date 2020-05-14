@@ -79,15 +79,18 @@ class TypeChecker(NodeVisitor):
     def visit_Instruction(self, node):
         return self.visit(node.instruction)
 
+    def visit_ForInstruction(self, node):
+        self.scope.pushScope('Function')
+        self.visit(node.instructions)
+        self.scope.popScope()
+
     def visit_LoopInstruction(self, node):
-        # todo it's not so simple
-        if self.scope.name != 'Loop':
+        if not self.scope.isUnderScope('Loop'):
             print("[{}] Break or coninue outer the Loop scope".format(node.lineno))
         pass
 
     def visit_ReturnInstruction(self, node):
-        # todo it's not so simple
-        if self.scope.name != 'Function':
+        if not self.scope.isUnderScope('Function'):
             print("[{}] Return used outside the function scope".format(node.lineno))
         pass 
     

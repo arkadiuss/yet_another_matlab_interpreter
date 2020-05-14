@@ -209,7 +209,7 @@ def p_matrix_1(p):
     """matrix : '[' outerlist ']' """
     # for working init.m
     #"""matrix : '[' outerlist ';' ']' """
-    p[0]=Matrix(p[2], p.lineno(1))
+    p[0]=Matrix(p[2], p.lineno(2))
 
 def p_matrix_2(p):
     """matrix : ONES '(' args_list ')'"""
@@ -229,7 +229,7 @@ def p_vector(p):
 
 def p_outerlist_1(p):
      """outerlist : outerlist ';' innerlist"""
-     p[0] = Outerlist(p[1], p[3], p.lineno(1))
+     p[0] = Outerlist(p[1], p[3], p.lineno(3))
 
 def p_outerlist_2(p):
     """outerlist : innerlist """

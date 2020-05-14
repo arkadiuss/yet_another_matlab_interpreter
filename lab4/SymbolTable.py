@@ -33,7 +33,7 @@ class SymbolTable(object):
         self.symbols = {}
         self.parent = parent
         self.name = name
-        self.scopes = []
+        self.scopes = [ "program" ]
 
     def put(self, name, symbol): # put variable symbol or fundef under <name> entry
         self.symbols[name] = symbol
@@ -42,10 +42,16 @@ class SymbolTable(object):
         return self.symbols[name]
 
     def getParentScope(self):
-        return self.parent
+        return self.scopes[-1]
+
+    def isUnderScope(self, name):
+        for s in reversed(self.scopes):
+            if s == name:
+                return True
+        return False
 
     def pushScope(self, name):
-        self.scopes.append(SymbolTable(self, name))
+        self.scopes.append(name)
 
     def popScope(self):
         return self.scopes.pop()
