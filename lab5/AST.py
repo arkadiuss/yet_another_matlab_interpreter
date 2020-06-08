@@ -28,12 +28,14 @@ class BinExpr(Node):
         self.left = left
         self.right = right
 
+
 class Assignment(Node):
     def __init__(self, op, left, right, lineno):
         super().__init__(lineno)
         self.op = op
         self.left = left
         self.right = right
+
 
 class Program(Node):
     def __init__(self, instructions_opt, lineno):
@@ -102,11 +104,13 @@ class ArgsList(Node):
         self.args_list = args_list
         self.arg = arg
 
+
 class LoopInstruction(Node):
     def __init__(self, instruction, lineno):
         super().__init__(lineno)
         self.instruction = instruction
-        
+
+
 class ReturnInstruction(Node):
     def __init__(self, expr, lineno):
         super().__init__(lineno)
@@ -158,10 +162,12 @@ class Ones(Node):
         super().__init__(lineno)
         self.n = n
 
+
 class Vector(Node):
     def __init__(self, outerlist, lineno):
         super().__init__(lineno)
         self.outerlist = outerlist
+
 
 class Outerlist(Node):
     def __init__(self, outerlist, innerlist, lineno):
@@ -176,11 +182,13 @@ class Innerlist(Node):
         self.innerlist = innerlist
         self.elem = elem
 
+
 class UnaryExpr(Node):
     def __init__(self, op, arg, lineno):
         super().__init__(lineno)
         self.op = op
         self.arg = arg
+
 
 class Error(Node):
     def __init__(self, lineno):
