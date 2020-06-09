@@ -192,4 +192,4 @@ class UnaryExpr(Node):
 
 class Error(Node):
     def __init__(self, lineno):
-        super().__init__(self, lineno)
+        super().__init__(lineno)

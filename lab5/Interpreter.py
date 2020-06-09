@@ -4,6 +4,7 @@ from Memory import *
 from Exceptions import *
 from visit import *
 import sys
+import numpy as np
 
 sys.setrecursionlimit(10000)
 
@@ -22,7 +23,6 @@ class Interpreter(object):
             '<=': lambda r1, r2: r1 <= r2,
             '<': lambda r1, r2: r1 < r2,
             '>': lambda r1, r2: r1 > r2,
-            # TODO operations on matrices
             '.+': lambda r1, r2: r1 + r2,
             '.-': lambda r1, r2: r1 - r2,
             '.*': lambda r1, r2: r1 * r2,
@@ -94,9 +94,8 @@ class Interpreter(object):
     @when(AST.ForInstruction)
     def visit(self, node):
         r = None
-        # TODO node.start/end .accept ??
         # TODO node.variable !
-        for i in range(node.start, node.end):
+        for i in range(node.start.accept(self), node.end.accept(self)):
             try:
                 r = node.instructions.accept(self)
             except BreakException:
@@ -104,7 +103,7 @@ class Interpreter(object):
             except ContinueException:
                 pass
             except ReturnValueException as e:
-                return e
+                return e.value
         return r
 
     # simplistic while loop interpretation
@@ -152,39 +151,42 @@ class Interpreter(object):
 
     @when(AST.Mid)
     def visit(self, node):
+        # TODO
         pass
 
     @when(AST.Matrix)
     def visit(self, node):
-        pass
+        return node.matrix.accept(self)
 
     @when(AST.Eye)
     def visit(self, node):
-        pass
+        return np.eye(node.n.accept(self))
 
     @when(AST.Zeros)
     def visit(self, node):
-        pass
+        return np.zeros(node.n.accept(self))
 
     @when(AST.Ones)
     def visit(self, node):
-        pass
+        return np.ones(node.n.accept(self))
 
     @when(AST.Vector)
     def visit(self, node):
-        pass
+        return node.outerlist.accept(self)
 
     @when(AST.Outerlist)
     def visit(self, node):
-        pass
+        return np.concatenate(([node.outerlist.accept(self)], [node.innerlist.accept(self)]), axis=1)
 
     @when(AST.Innerlist)
     def visit(self, node):
-        pass
+        return np.concatenate((node.innerlist.accept(self), node.elem.accept(self)), axis=0)
 
     @when(AST.UnaryExpr)
     def visit(self, node):
-        pass
+        if node.op == '-':
+            return - node.arg.accept(self)
+        return np.transpose(node.arg.accept(self))
 
     @when(AST.Error)
     def visit(self, node):
