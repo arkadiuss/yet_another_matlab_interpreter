@@ -98,7 +98,7 @@ class Interpreter(object):
         self.memory_stack.push(Memory('for_instr'))
         print(node.start, node.end)
         for i in range(node.start.accept(self), node.end.accept(self)):
-            self.memory_stack.set(node.variable.accept(self), i)
+            self.memory_stack.set(node.variable.name, i)
             try:
                 r = node.instructions.accept(self)
             except BreakException:
