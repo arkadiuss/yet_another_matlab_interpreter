@@ -37,10 +37,8 @@ class SymbolTable(object):
 
     def put(self, name, symbol): # put variable symbol or fundef under <name> entry
         self.symbols[name] = symbol
-        print("put", self.symbols)
 
     def get(self, name): # get variable symbol or fundef from <name> entry
-        print("get", self.symbols)
         return self.symbols[name]
 
     def getParentScope(self):

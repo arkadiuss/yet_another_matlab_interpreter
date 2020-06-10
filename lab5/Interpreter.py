@@ -40,8 +40,6 @@ class Interpreter(object):
 
     @when(AST.IntNum)
     def visit(self, node):
-        print(node)
-        print(isinstance(node.value, int), "tiutauj")
         return int(node.value)
 
     @when(AST.FloatNum)
@@ -64,9 +62,15 @@ class Interpreter(object):
 
     @when(AST.Assignment)
     def visit(self, node):
-        r1 = node.left.name  # working for Variable, for MID probably don't
         r2 = node.right.accept(self)
-        self.memory_stack.set(r1, r2)
+        if isinstance(node.left, AST.Variable):
+            r1 = node.left.name
+            self.memory_stack.set(r1, r2)
+        else:
+            r1 = node.left.id
+            matrix = self.memory_stack.get(r1)
+            matrix[node.left.x, node.left.y] = r2
+            self.memory_stack.set(r1, matrix)
         return r2
 
     @when(AST.Program)
@@ -163,15 +167,10 @@ class Interpreter(object):
         r = node.token.accept(self)
         return r
 
-    @when(AST.Expression)
-    # TODO w mparserze w ogole tego nie uzywamy
-    def visit(self, node):
-        pass
-
     @when(AST.Mid)
     def visit(self, node):
-        # TODO
-        pass
+        print(node.x)
+        return self.memory_stack.get(node.id.accept(self))[node.x, node.y]
 
     @when(AST.Matrix)
     def visit(self, node):
@@ -179,17 +178,18 @@ class Interpreter(object):
 
     @when(AST.Eye)
     def visit(self, node):
-        return np.eye(node.n.accept(self)[0])
+        d = node.n.accept(self)[0]
+        return np.eye(d)
 
     @when(AST.Zeros)
     def visit(self, node):
-        d = node.n.accept(self)
-        print(isinstance(d, int))
-        return np.zeros(d[0])
+        d = node.n.accept(self)[0]
+        return np.zeros((d, d))
 
     @when(AST.Ones)
     def visit(self, node):
-        return np.ones(node.n.accept(self)[0])
+        d = node.n.accept(self)[0]
+        return np.ones((d, d))
 
     @when(AST.Vector)
     def visit(self, node):

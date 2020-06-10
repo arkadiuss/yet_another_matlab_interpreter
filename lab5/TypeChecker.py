@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
 from SymbolTable import *
+import AST
 
 class NodeVisitor(object):
 
     def visit(self, node):
-        print(node)
         method = 'visit_' + node.__class__.__name__
         visitor = getattr(self, method, self.generic_visit)
         return visitor(node)
@@ -109,16 +109,14 @@ class TypeChecker(NodeVisitor):
         pass
 
     def visit_BinExpr(self, node):
-        type1 = self.visit(node.left)    
+        type1 = self.visit(node.left)
         type2 = self.visit(node.right) 
         op    = node.op
         if isinstance(type1, VariableSymbol):
             type1 = type1.type
         if isinstance(type2, VariableSymbol):
             type2 = type2.type
-        print(type1, type2)
         if isinstance(type1, str) and isinstance(type2, str):
-            print("TUATJ")
             return self.types[op][type1][type2]
         if isinstance(type1, MatrixSymbol) and isinstance(type2, MatrixSymbol):
             if op == '*' and type1.size_c == type2.size_r:
@@ -179,20 +177,18 @@ class TypeChecker(NodeVisitor):
         return MatrixSymbol(n,n)
 
     def visit_Assignment(self, node):
-        print("Assignment", node.right)
         rtype = self.visit(node.right)
-        print("po visit")
-        symbol = VariableSymbol(node.left.name, rtype)
-        print("SYMBOL", symbol)
-        self.scope.put(node.left.name, symbol)
-        print(self.scope)
+        if isinstance(node.left, AST.Variable):
+            symbol = VariableSymbol(node.left.name, rtype)
+            self.scope.put(node.left.name, symbol)
+        else:
+            symbol = VariableSymbol(node.left.id, rtype)
         return symbol
 
     def visit_Variable(self, node):
         return self.scope.get(node.name)
         
     def visit_Token(self, node):
-        print("PRINT visit token", node.token)
         return self.visit(node.token)
 
     def visit_ArgsList(self, node):
