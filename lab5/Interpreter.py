@@ -12,6 +12,7 @@ sys.setrecursionlimit(10000)
 class Interpreter(object):
 
     def __init__(self):
+        self.memory_stack = MemoryStack(Memory("program"))
         self.bin_expr = {
             '+': lambda r1, r2: r1 + r2,
             '-': lambda r1, r2: r1 - r2,
@@ -47,7 +48,7 @@ class Interpreter(object):
 
     @when(AST.Variable)
     def visit(self, node):
-        pass
+        return node.name
 
     @when(AST.BinExpr)
     def visit(self, node):
@@ -57,9 +58,10 @@ class Interpreter(object):
 
     @when(AST.Assignment)
     def visit(self, node):
-        # TODO add r1 to memory
         r1 = node.left.accept(self)
         r2 = node.right.accept(self)
+        print("{} = {}".format(r1, r2))
+        self.memory_stack.set(r1, r2)
         return r2
 
     @when(AST.Program)
@@ -94,8 +96,9 @@ class Interpreter(object):
     @when(AST.ForInstruction)
     def visit(self, node):
         r = None
-        # TODO node.variable !
+        self.memory_stack.push(Memory('for_instr'))
         for i in range(node.start.accept(self), node.end.accept(self)):
+            self.memory_stack.set(node.variable.accept(self), i)
             try:
                 r = node.instructions.accept(self)
             except BreakException:
@@ -103,13 +106,16 @@ class Interpreter(object):
             except ContinueException:
                 pass
             except ReturnValueException as e:
+                self.memory_stack.pop()
                 return e.value
+        self.memory_stack.pop()
         return r
 
     # simplistic while loop interpretation
     @when(AST.WhileInstruction)
     def visit(self, node):
         r = None
+        self.memory_stack.push(Memory('while_instr'))
         while node.cond.accept(self):
             try:
                 r = node.instructions.accept(self)
@@ -118,19 +124,29 @@ class Interpreter(object):
             except ContinueException:
                 pass
             except ReturnValueException as e:
+                self.memory_stack.pop()
                 return e.value
+        self.memory_stack.pop()
         return r
 
     @when(AST.PrintInstruction)
     def visit(self, node):
-        return node.print_list.accept(self)
+        r = node.print_list.accept(self)
+        print(r)
+        return r
 
     @when(AST.ArgsList)
     def visit(self, node):
-        # TODO not working properly yet
         if node.args_list is not None:
-            return node.args_list.accept(self) + str(node.arg.accept(self))
-        return str(node.arg)
+            return node.args_list.accept(self) + self._get_arg_projection(node.arg)
+        return self._get_arg_projection(node.arg)
+
+    def _get_arg_projection(self, arg):
+        if isinstance(arg, AST.Variable):
+            return str(self.memory_stack.get(arg.accept(self)))
+        if isinstance(arg, str):
+            return arg[1: len(arg)-1]
+        return str(arg.accept(self))
 
     @when(AST.LoopInstruction)
     def visit(self, node):
@@ -145,8 +161,8 @@ class Interpreter(object):
 
     @when(AST.Token)
     def visit(self, node):
-        print(node.token)
-        return node.token.accept(self)
+        r = node.token.accept(self)
+        return r
 
     @when(AST.Expression)
     # TODO w mparserze w ogole tego nie uzywamy

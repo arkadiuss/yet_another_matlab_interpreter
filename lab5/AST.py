@@ -3,7 +3,7 @@ class Node(object):
         self.lineno = lineno
 
     def accept(self, visitor):
-        visitor.visit(self)
+        return visitor.visit(self)
 
 
 class IntNum(Node):
