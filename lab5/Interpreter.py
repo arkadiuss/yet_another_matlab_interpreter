@@ -116,7 +116,7 @@ class Interpreter(object):
     def visit(self, node):
         r = None
         self.memory_stack.push(Memory('while_instr'))
-        while node.cond.accept(self):
+        while node.condition.accept(self):
             try:
                 r = node.instructions.accept(self)
             except BreakException:

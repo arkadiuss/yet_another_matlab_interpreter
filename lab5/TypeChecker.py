@@ -80,10 +80,19 @@ class TypeChecker(NodeVisitor):
         return self.visit(node.instruction)
 
     def visit_ForInstruction(self, node):
-        self.scope.pushScope('Function')
+        self.scope.pushScope('Loop')
         self.visit(node.instructions)
         self.scope.popScope()
 
+    def visit_WhileInstruction(self, node):
+        self.scope.pushScope('Loop')
+        self.visit(node.instructions)
+        self.scope.popScope()
+
+    def visit_IfInstruction(self, node):
+        self.scope.pushScope('If')
+        self.visit(node.instructions)
+        self.scope.popScope()
     def visit_LoopInstruction(self, node):
         if not self.scope.isUnderScope('Loop'):
             print("[{}] Break or coninue outer the Loop scope".format(node.lineno))
@@ -105,7 +114,7 @@ class TypeChecker(NodeVisitor):
             type1 = type1.type
         if isinstance(type2, VariableSymbol):
             type2 = type2.type
-        if type1 is str and type2 is str:
+        if isinstance(type1, str) and isinstance(type2, str):
             return self.types[op][type1][type2]
         if isinstance(type1, MatrixSymbol) and isinstance(type2, MatrixSymbol):
             if op == '*' and type1.size_c == type2.size_r:
