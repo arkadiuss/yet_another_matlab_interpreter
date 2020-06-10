@@ -116,14 +116,16 @@ class TypeChecker(NodeVisitor):
             type1 = type1.type
         if isinstance(type2, VariableSymbol):
             type2 = type2.type
-        if isinstance(type1, str) and isinstance(type2, str):
-            return self.types[op][type1][type2]
+            
         if isinstance(type1, MatrixSymbol) and isinstance(type2, MatrixSymbol):
-            if op == '*' and type1.size_c == type2.size_r:
+            if op == '.*' and type1.size_c == type2.size_r:
                 return MatrixSymbol(type1.size_r, type2.size_c)
-            if op in ['+', '-'] and type1.size_r == type2.size_r and type1.size_c == type2.size_c:
+            if op == './' and type2.size_c == type2.size_r and type1.size_c == type2.size_c: 
                 return MatrixSymbol(type1.size_r, type2.size_c)
-         
+            if op in ['.+', '.-'] and type1.size_r == type2.size_r and type1.size_c == type2.size_c:
+                return MatrixSymbol(type1.size_r, type2.size_c)
+        if isinstance(type1, str) and isinstance(type2, str):
+            return self.types[op][type1][type2] 
         print("[{0}] Incompatibile types: {1} and {2}".format(node.lineno, type1, type2))
 
 
