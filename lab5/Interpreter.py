@@ -26,8 +26,8 @@ class Interpreter(object):
             '>': lambda r1, r2: r1 > r2,
             '.+': lambda r1, r2: r1 + r2,
             '.-': lambda r1, r2: r1 - r2,
-            '.*': lambda r1, r2: r1 * r2,
-            './': lambda r1, r2: r1 / r2
+            '.*': lambda r1, r2: np.dot(r1, r2),
+            './': lambda r1, r2: np.divide(r1, r2)
         }
 
     @on('node')
