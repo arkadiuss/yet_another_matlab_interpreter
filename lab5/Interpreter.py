@@ -96,7 +96,9 @@ class Interpreter(object):
     def visit(self, node):
         if node.condition.accept(self):
             return node.instructions.accept(self)
-        return node.else_block.accept(self)
+        if node.else_block is not None:
+            return node.else_block.accept(self)
+        return None 
 
     @when(AST.ElseInstruction)
     def visit(self, node):
@@ -106,9 +108,10 @@ class Interpreter(object):
     def visit(self, node):
         r = None
         self.memory_stack.push(Memory('for_instr'))
-        print(node.start, node.end)
-        for i in range(node.start.accept(self), node.end.accept(self)):
-            self.memory_stack.set(node.variable.name, i)
+        s = node.start.accept(self)
+        e = node.end.accept(self)
+        for i in range(s, e):
+            self.memory_stack.set(node.variable, i)
             try:
                 r = node.instructions.accept(self)
             except BreakException:
@@ -148,12 +151,12 @@ class Interpreter(object):
     @when(AST.ArgsList)
     def visit(self, node):
         if node.args_list is not None:
-            return node.args_list.accept(self) + [node_arg.accept(self)]
+            return node.args_list.accept(self) + [node.arg.accept(self)]
         return [node.arg.accept(self)]
 
     @when(AST.LoopInstruction)
     def visit(self, node):
-        if node.instruction == 'BREAK':
+        if node.instruction == 'break':
             raise BreakException
         raise ContinueException
 
@@ -169,7 +172,6 @@ class Interpreter(object):
 
     @when(AST.Mid)
     def visit(self, node):
-        print(node.x)
         return self.memory_stack.get(node.id.accept(self))[node.x, node.y]
 
     @when(AST.Matrix)

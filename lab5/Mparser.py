@@ -62,10 +62,8 @@ def p_if_instruction_2(p):
     p[0] = IfInstruction(p[3], p[5], ElseInstruction(p[7], p.lineno(7)), p.lineno(1))
 
 def p_for_instruction(p):
-    """for_instruction : FOR ID '=' int ':' ID instructions_block
-                       | FOR ID '=' int ':' ID instruction
-                       | FOR ID '=' ID ':' ID instructions_block
-                       | FOR ID '=' ID ':' ID instruction"""
+    """for_instruction : FOR ID '=' expr ':' expr instructions_block
+                       | FOR ID '=' expr ':' expr instruction """
     p[0] = ForInstruction(p[2], p[4], p[6], p[7], p.lineno(1))
 
 def p_while_instruction(p):
@@ -312,7 +310,7 @@ def p_float(p):
 
 def p_string(p):
     """string : STRING"""
-    p[0] = String(str(p[1]), p.lineno(1))
+    p[0] = String(str(p[1])[1:-1], p.lineno(1))
 
 
 parser = yacc.yacc()

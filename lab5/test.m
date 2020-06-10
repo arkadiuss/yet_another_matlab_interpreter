@@ -1,7 +1,7 @@
 N = 10;
 M = 20;
 
-print N, "___", M;
+print N, "___", M, "", "okejka" ;
 
 
 a = 1;
