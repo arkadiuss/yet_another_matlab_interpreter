@@ -2,6 +2,9 @@ class Node(object):
     def __init__(self, lineno):
         self.lineno = lineno
 
+    def accept(self, visitor):
+        visitor.visit(self)
+
 
 class IntNum(Node):
     def __init__(self, value, lineno):

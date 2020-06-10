@@ -127,7 +127,10 @@ class Interpreter(object):
 
     @when(AST.ArgsList)
     def visit(self, node):
-        return node.args_list.accept(self) + node.arg
+        # TODO not working properly yet
+        if node.args_list is not None:
+            return node.args_list.accept(self) + str(node.arg.accept(self))
+        return str(node.arg)
 
     @when(AST.LoopInstruction)
     def visit(self, node):
@@ -142,6 +145,7 @@ class Interpreter(object):
 
     @when(AST.Token)
     def visit(self, node):
+        print(node.token)
         return node.token.accept(self)
 
     @when(AST.Expression)
