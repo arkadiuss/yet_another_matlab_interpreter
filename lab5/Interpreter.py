@@ -134,7 +134,7 @@ class Interpreter(object):
     @when(AST.PrintInstruction)
     def visit(self, node):
         r = node.print_list.accept(self)
-        print(" ".join(r))
+        print(" ".join(map(str, r)))
         return r
 
     @when(AST.ArgsList)
@@ -200,13 +200,17 @@ class Interpreter(object):
 
     @when(AST.Outerlist)
     def visit(self, node):
-        return np.concatenate(([node.outerlist.accept(self)], [node.innerlist.accept(self)]), axis=1)
+        if node.outerlist is None:
+            return [node.innerlist.accept(self)]
+        outer = node.outerlist.accept(self)
+        inner = node.innerlist.accept(self)
+        return np.concatenate((outer, [inner]), axis=0)
 
     @when(AST.Innerlist)
     def visit(self, node):
         if node.innerlist is None:
             return np.array([node.elem.accept(self)])
-        return np.concatenate((node.innerlist.accept(self), [node.elem.accept(self)]), axis=0)
+        return np.concatenate((node.innerlist.accept(self), [node.elem.accept(self)]), axis=None)
 
     @when(AST.UnaryExpr)
     def visit(self, node):
