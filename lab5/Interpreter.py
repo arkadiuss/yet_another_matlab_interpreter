@@ -48,7 +48,7 @@ class Interpreter(object):
 
     @when(AST.Variable)
     def visit(self, node):
-        return node.name
+        return self.memory_stack.get(node.name)
 
     @when(AST.BinExpr)
     def visit(self, node):
@@ -58,9 +58,8 @@ class Interpreter(object):
 
     @when(AST.Assignment)
     def visit(self, node):
-        r1 = node.left.accept(self)
+        r1 = node.left.name  # working for Variable, for MID probably don't
         r2 = node.right.accept(self)
-        print("{} = {}".format(r1, r2))
         self.memory_stack.set(r1, r2)
         return r2
 
@@ -97,6 +96,7 @@ class Interpreter(object):
     def visit(self, node):
         r = None
         self.memory_stack.push(Memory('for_instr'))
+        print(node.start, node.end)
         for i in range(node.start.accept(self), node.end.accept(self)):
             self.memory_stack.set(node.variable.accept(self), i)
             try:
@@ -142,8 +142,8 @@ class Interpreter(object):
         return self._get_arg_projection(node.arg)
 
     def _get_arg_projection(self, arg):
-        if isinstance(arg, AST.Variable):
-            return str(self.memory_stack.get(arg.accept(self)))
+        # if isinstance(arg, AST.Variable):
+        #     return str(self.memory_stack.get(arg.accept(self)))
         if isinstance(arg, str):
             return arg[1: len(arg)-1]
         return str(arg.accept(self))

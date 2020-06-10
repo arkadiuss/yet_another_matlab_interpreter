@@ -24,8 +24,8 @@ Rule 14    if_instruction -> IF ( relational_expr ) instructions_block
 Rule 15    if_instruction -> IF ( relational_expr ) instruction
 Rule 16    if_instruction -> IF ( relational_expr ) instructions_block ELSE instruction
 Rule 17    if_instruction -> IF ( relational_expr ) instruction ELSE instruction
-Rule 18    for_instruction -> FOR ID = INTNUM : ID instructions_block
-Rule 19    for_instruction -> FOR ID = INTNUM : ID instruction
+Rule 18    for_instruction -> FOR ID = int : ID instructions_block
+Rule 19    for_instruction -> FOR ID = int : ID instruction
 Rule 20    for_instruction -> FOR ID = ID : ID instructions_block
 Rule 21    for_instruction -> FOR ID = ID : ID instruction
 Rule 22    while_instruction -> WHILE ( relational_expr ) instructions_block
@@ -125,7 +125,7 @@ FOR                  : 18 19 20 21
 GREATEREQUAL         : 53
 ID                   : 18 18 19 19 20 20 20 21 21 21 32 33 34 35 36 38 59 70 81
 IF                   : 14 15 16 17
-INTNUM               : 18 19 59 59 84
+INTNUM               : 59 59 84
 LOWEREQUAL           : 56
 MULASSIGN            : 35
 NOTEQUALS            : 55
@@ -158,7 +158,7 @@ instruction          : 4 5 15 16 17 17 19 21 23
 instructions         : 2 3 4
 instructions_block   : 13 14 16 18 20 22
 instructions_opt     : 1
-int                  : 39 71
+int                  : 18 19 39 71
 loop_instruction     : 11
 matrix               : 41 80
 matrix_expr          : 43 73 74 79 83
@@ -202,8 +202,8 @@ state 0
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -283,8 +283,8 @@ state 4
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -489,8 +489,8 @@ state 15
 
 state 16
 
-    (18) for_instruction -> FOR . ID = INTNUM : ID instructions_block
-    (19) for_instruction -> FOR . ID = INTNUM : ID instruction
+    (18) for_instruction -> FOR . ID = int : ID instructions_block
+    (19) for_instruction -> FOR . ID = int : ID instruction
     (20) for_instruction -> FOR . ID = ID : ID instructions_block
     (21) for_instruction -> FOR . ID = ID : ID instruction
 
@@ -606,8 +606,8 @@ state 22
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -1042,8 +1042,8 @@ state 32
 
 state 33
 
-    (18) for_instruction -> FOR ID . = INTNUM : ID instructions_block
-    (19) for_instruction -> FOR ID . = INTNUM : ID instruction
+    (18) for_instruction -> FOR ID . = int : ID instructions_block
+    (19) for_instruction -> FOR ID . = int : ID instruction
     (20) for_instruction -> FOR ID . = ID : ID instructions_block
     (21) for_instruction -> FOR ID . = ID : ID instruction
 
@@ -1285,6 +1285,7 @@ state 45
     >               reduce using rule 84 (int -> INTNUM .)
     )               reduce using rule 84 (int -> INTNUM .)
     ]               reduce using rule 84 (int -> INTNUM .)
+    :               reduce using rule 84 (int -> INTNUM .)
 
 
 state 46
@@ -1699,14 +1700,16 @@ state 74
 
 state 75
 
-    (18) for_instruction -> FOR ID = . INTNUM : ID instructions_block
-    (19) for_instruction -> FOR ID = . INTNUM : ID instruction
+    (18) for_instruction -> FOR ID = . int : ID instructions_block
+    (19) for_instruction -> FOR ID = . int : ID instruction
     (20) for_instruction -> FOR ID = . ID : ID instructions_block
     (21) for_instruction -> FOR ID = . ID : ID instruction
+    (84) int -> . INTNUM
 
-    INTNUM          shift and go to state 110
     ID              shift and go to state 109
+    INTNUM          shift and go to state 45
 
+    int                            shift and go to state 110
 
 state 76
 
@@ -2222,8 +2225,8 @@ state 102
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -2439,8 +2442,8 @@ state 109
 
 state 110
 
-    (18) for_instruction -> FOR ID = INTNUM . : ID instructions_block
-    (19) for_instruction -> FOR ID = INTNUM . : ID instruction
+    (18) for_instruction -> FOR ID = int . : ID instructions_block
+    (19) for_instruction -> FOR ID = int . : ID instruction
 
     :               shift and go to state 142
 
@@ -2468,8 +2471,8 @@ state 111
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -2969,8 +2972,8 @@ state 141
 
 state 142
 
-    (18) for_instruction -> FOR ID = INTNUM : . ID instructions_block
-    (19) for_instruction -> FOR ID = INTNUM : . ID instruction
+    (18) for_instruction -> FOR ID = int : . ID instructions_block
+    (19) for_instruction -> FOR ID = int : . ID instruction
 
     ID              shift and go to state 154
 
@@ -3123,8 +3126,8 @@ state 151
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -3178,8 +3181,8 @@ state 152
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -3235,8 +3238,8 @@ state 153
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -3270,8 +3273,8 @@ state 153
 
 state 154
 
-    (18) for_instruction -> FOR ID = INTNUM : ID . instructions_block
-    (19) for_instruction -> FOR ID = INTNUM : ID . instruction
+    (18) for_instruction -> FOR ID = int : ID . instructions_block
+    (19) for_instruction -> FOR ID = int : ID . instruction
     (3) instructions_block -> . { instructions }
     (6) instruction -> . assignment ;
     (7) instruction -> . if_instruction
@@ -3291,8 +3294,8 @@ state 154
     (15) if_instruction -> . IF ( relational_expr ) instruction
     (16) if_instruction -> . IF ( relational_expr ) instructions_block ELSE instruction
     (17) if_instruction -> . IF ( relational_expr ) instruction ELSE instruction
-    (18) for_instruction -> . FOR ID = INTNUM : ID instructions_block
-    (19) for_instruction -> . FOR ID = INTNUM : ID instruction
+    (18) for_instruction -> . FOR ID = int : ID instructions_block
+    (19) for_instruction -> . FOR ID = int : ID instruction
     (20) for_instruction -> . FOR ID = ID : ID instructions_block
     (21) for_instruction -> . FOR ID = ID : ID instruction
     (22) while_instruction -> . WHILE ( relational_expr ) instructions_block
@@ -3424,7 +3427,7 @@ state 158
 
 state 159
 
-    (18) for_instruction -> FOR ID = INTNUM : ID instructions_block .
+    (18) for_instruction -> FOR ID = int : ID instructions_block .
     (13) instruction -> instructions_block .
 
   ! reduce/reduce conflict for ELSE resolved using rule 13 (instruction -> instructions_block .)
@@ -3452,36 +3455,36 @@ state 159
     $end            reduce using rule 13 (instruction -> instructions_block .)
     }               reduce using rule 13 (instruction -> instructions_block .)
 
-  ! ID              [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! IF              [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! FOR             [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! WHILE           [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! PRINT           [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! BREAK           [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! CONTINUE        [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! RETURN          [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! {               [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! $end            [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! }               [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
-  ! ELSE            [ reduce using rule 18 (for_instruction -> FOR ID = INTNUM : ID instructions_block .) ]
+  ! ID              [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! IF              [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! FOR             [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! WHILE           [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! PRINT           [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! BREAK           [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! CONTINUE        [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! RETURN          [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! {               [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! $end            [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! }               [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
+  ! ELSE            [ reduce using rule 18 (for_instruction -> FOR ID = int : ID instructions_block .) ]
 
 
 state 160
 
-    (19) for_instruction -> FOR ID = INTNUM : ID instruction .
+    (19) for_instruction -> FOR ID = int : ID instruction .
 
-    ID              reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    IF              reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    FOR             reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    WHILE           reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    PRINT           reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    BREAK           reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    CONTINUE        reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    RETURN          reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    {               reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    $end            reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    }               reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
-    ELSE            reduce using rule 19 (for_instruction -> FOR ID = INTNUM : ID instruction .)
+    ID              reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    IF              reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    FOR             reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    WHILE           reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    PRINT           reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    BREAK           reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    CONTINUE        reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    RETURN          reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    {               reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    $end            reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    }               reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
+    ELSE            reduce using rule 19 (for_instruction -> FOR ID = int : ID instruction .)
 
 WARNING: 
 WARNING: Conflicts:
@@ -3508,8 +3511,8 @@ WARNING: rejected rule (while_instruction -> WHILE ( relational_expr ) instructi
 WARNING: reduce/reduce conflict in state 157 resolved using rule (instruction -> instructions_block)
 WARNING: rejected rule (for_instruction -> FOR ID = ID : ID instructions_block) in state 157
 WARNING: reduce/reduce conflict in state 159 resolved using rule (instruction -> instructions_block)
-WARNING: rejected rule (for_instruction -> FOR ID = INTNUM : ID instructions_block) in state 159
+WARNING: rejected rule (for_instruction -> FOR ID = int : ID instructions_block) in state 159
 WARNING: Rule (if_instruction -> IF ( relational_expr ) instructions_block) is never reduced
 WARNING: Rule (while_instruction -> WHILE ( relational_expr ) instructions_block) is never reduced
 WARNING: Rule (for_instruction -> FOR ID = ID : ID instructions_block) is never reduced
-WARNING: Rule (for_instruction -> FOR ID = INTNUM : ID instructions_block) is never reduced
+WARNING: Rule (for_instruction -> FOR ID = int : ID instructions_block) is never reduced
