@@ -40,7 +40,9 @@ class Interpreter(object):
 
     @when(AST.IntNum)
     def visit(self, node):
-        return node.value
+        print(node)
+        print(isinstance(node.value, int), "tiutauj")
+        return int(node.value)
 
     @when(AST.FloatNum)
     def visit(self, node):
@@ -132,21 +134,21 @@ class Interpreter(object):
     @when(AST.PrintInstruction)
     def visit(self, node):
         r = node.print_list.accept(self)
-        print(r)
+        print(" ".join(r))
         return r
 
     @when(AST.ArgsList)
     def visit(self, node):
         if node.args_list is not None:
-            return node.args_list.accept(self) + self._get_arg_projection(node.arg)
-        return self._get_arg_projection(node.arg)
+            return node.args_list.accept(self) + [self._get_arg_projection(node.arg)]
+        return [self._get_arg_projection(node.arg)]
 
     def _get_arg_projection(self, arg):
         # if isinstance(arg, AST.Variable):
         #     return str(self.memory_stack.get(arg.accept(self)))
         if isinstance(arg, str):
             return arg[1: len(arg)-1]
-        return str(arg.accept(self))
+        return arg.accept(self)
 
     @when(AST.LoopInstruction)
     def visit(self, node):
@@ -180,15 +182,17 @@ class Interpreter(object):
 
     @when(AST.Eye)
     def visit(self, node):
-        return np.eye(node.n.accept(self))
+        return np.eye(node.n.accept(self)[0])
 
     @when(AST.Zeros)
     def visit(self, node):
-        return np.zeros(node.n.accept(self))
+        d = node.n.accept(self)
+        print(isinstance(d, int))
+        return np.zeros(d[0])
 
     @when(AST.Ones)
     def visit(self, node):
-        return np.ones(node.n.accept(self))
+        return np.ones(node.n.accept(self)[0])
 
     @when(AST.Vector)
     def visit(self, node):
@@ -200,7 +204,9 @@ class Interpreter(object):
 
     @when(AST.Innerlist)
     def visit(self, node):
-        return np.concatenate((node.innerlist.accept(self), node.elem.accept(self)), axis=0)
+        if node.innerlist is None:
+            return np.array([node.elem.accept(self)])
+        return np.concatenate((node.innerlist.accept(self), [node.elem.accept(self)]), axis=0)
 
     @when(AST.UnaryExpr)
     def visit(self, node):

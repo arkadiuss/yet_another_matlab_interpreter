@@ -10,9 +10,13 @@ while(k>0){
     print k;
 }
 
-if(M==20){
+if(k==0){
     print "dziala :D";
 }
 else {
     print "jednak cos nie dziala :/";
 }
+
+# for
+# macierze
+

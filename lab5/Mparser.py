@@ -304,11 +304,11 @@ def p_unary_expr(p):
 
 def p_int(p):
     """int : INTNUM """
-    p[0] = IntNum(p[1], p.lineno(1))
+    p[0] = IntNum(int(p[1]), p.lineno(1))
 
 def p_float(p):
     """float : FLONUM"""
-    p[0] = FloatNum(p[1], p.lineno(1))
+    p[0] = FloatNum(float(p[1]), p.lineno(1))
 
 
 parser = yacc.yacc()
