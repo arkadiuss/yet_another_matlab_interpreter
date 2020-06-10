@@ -48,6 +48,10 @@ class Interpreter(object):
     def visit(self, node):
         return node.value
 
+    @when(AST.String)
+    def visit(self, node):
+        return node.value
+
     @when(AST.Variable)
     def visit(self, node):
         return self.memory_stack.get(node.name)
@@ -140,15 +144,8 @@ class Interpreter(object):
     @when(AST.ArgsList)
     def visit(self, node):
         if node.args_list is not None:
-            return node.args_list.accept(self) + [self._get_arg_projection(node.arg)]
-        return [self._get_arg_projection(node.arg)]
-
-    def _get_arg_projection(self, arg):
-        # if isinstance(arg, AST.Variable):
-        #     return str(self.memory_stack.get(arg.accept(self)))
-        if isinstance(arg, str):
-            return arg[1: len(arg)-1]
-        return arg.accept(self)
+            return node.args_list.accept(self) + [node_arg.accept(self)]
+        return [node.arg.accept(self)]
 
     @when(AST.LoopInstruction)
     def visit(self, node):

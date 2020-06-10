@@ -88,12 +88,12 @@ def p_print_instruction(p):
 
 def p_args_list_1(p):
     """args_list : args_list ',' expr
-                  | args_list ',' STRING"""
+                  | args_list ',' string"""
     p[0] = ArgsList(p[1], p[3], p.lineno(1))
 
 def p_args_list_2(p):
     """args_list : expr
-                  | STRING"""
+                  | string"""
     p[0] = ArgsList(None, p[1], p.lineno(1))
 
 def p_assignment_1(p):
@@ -309,6 +309,10 @@ def p_int(p):
 def p_float(p):
     """float : FLONUM"""
     p[0] = FloatNum(float(p[1]), p.lineno(1))
+
+def p_string(p):
+    """string : STRING"""
+    p[0] = String(str(p[1]), p.lineno(1))
 
 
 parser = yacc.yacc()

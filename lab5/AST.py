@@ -17,6 +17,10 @@ class FloatNum(Node):
         super().__init__(lineno)
         self.value = value
 
+class String(Node):
+    def __init__(self, value, lineno):
+        super().__init__(lineno)
+        self.value = value 
 
 class Variable(Node):
     def __init__(self, name, lineno):

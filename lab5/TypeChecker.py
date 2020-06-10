@@ -94,6 +94,7 @@ class TypeChecker(NodeVisitor):
         self.scope.pushScope('If')
         self.visit(node.instructions)
         self.scope.popScope()
+    
     def visit_LoopInstruction(self, node):
         if not self.scope.isUnderScope('Loop'):
             print("[{}] Break or coninue outer the Loop scope".format(node.lineno))
@@ -108,11 +109,8 @@ class TypeChecker(NodeVisitor):
         pass
 
     def visit_BinExpr(self, node):
-        print("BIN", node.left.name, node.right.name)
         type1 = self.visit(node.left)    
-        print(type1)
         type2 = self.visit(node.right) 
-        print(type2)
         op    = node.op
         if isinstance(type1, VariableSymbol):
             type1 = type1.type
@@ -208,4 +206,7 @@ class TypeChecker(NodeVisitor):
 
     def visit_FloatNum(self, node):
         return 'float'
+
+    def visit_String(self, node):
+        return 'string'
 
