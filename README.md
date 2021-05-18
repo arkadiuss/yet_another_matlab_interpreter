@@ -1,4 +1,4 @@
-# Basic interpreter
+# Yet another Matlab Interpreter (YaMI)
 Basic interpreter for Matlab-like language based on PLY (Python Lex-Yacc). Realized during compilers course.
 
 |Lab|Description|
